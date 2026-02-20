@@ -5,7 +5,7 @@
 }
 
 body {
-    background: #000000;
+    background: #ffffff;
     min-height: 100vh;
     padding: 20px;
 }
@@ -16,7 +16,11 @@ body {
 }
 
 header {
-    text-align: center;
-    color: white;
+    color: rgb(0, 0, 0);
     margin-bottom: 40px;
+}
+
+img.upload-icon {
+    width: 100px;
+    height: 100px;
 }
