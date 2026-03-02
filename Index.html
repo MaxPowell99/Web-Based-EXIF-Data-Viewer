@@ -3,7 +3,7 @@
 <head>
     <title>EXIF Data Viewer</title>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <link rel="stylesheet" href="Styles/style.css">
     <script src="script.js" defer></script>
 </head>
@@ -25,10 +25,13 @@
         </nav>
 
         <div class="upload-section">
-            <h1>View your image's data</h1>
+            <h1>View your image's EXIF data</h1>
             <h2>Upload an Image</h2>
+            <div class="upload-box">
                 <img src="Images/upload-image-icon.jpg" alt="Upload Icon" class="upload-icon">
-            <input type="file" id="imageInput" accept="image/*">
+                <p>Select an image to extract EXIF data</p>
+                <input type="file" id="imageInput" accept="image/*">
+            </div>
         </div>
 </body>
 </html>
