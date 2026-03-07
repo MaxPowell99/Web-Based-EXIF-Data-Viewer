@@ -48,7 +48,6 @@ header, .preview, .exif-data, .about-section {
     max-width: 1500px;
     margin: auto;
     background: #ffffff;
-    padding: 40px;
     border-radius: 8px;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
 }
