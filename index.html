@@ -7,24 +7,21 @@
     <link rel="stylesheet" href="Styles/style.css">
     <script src="script.js" defer></script>
 </head>
+
 <body>
-    <div class="container">
+    <div class="grid-container">
         <header>
-            <div class="header-left">
                 <h1>EXIF Data Viewer</h1>        
-            </div>
-            <div class="right-section">
-                <!--Future implementation for user authentication (Login) -->
-            </div>
         </header>
 
         <nav>
             <ul>
-                <li><a href="index.html">Home</a></li>
+                <li><a href="index.html">Upload</a></li>
+                <li><a href="about.html">About</a></li>
             </ul>
         </nav>
 
-        <div class="upload-section">
+        <section class="upload-section">
             <h1>View your image's EXIF data</h1>
             <h2>Upload an Image</h2>
             <div class="upload-box">
@@ -35,6 +32,22 @@
             <button id="extractButton" class="extract-button">
             Extract EXIF Data
             </button>
-        </div>
+        </section>
+
+        <section class="preview">
+            <h2>Image Preview</h2>
+            <div id="imagePreview"></div>
+        </section>
+
+        <section class="exif-data">
+            <h2>EXIF Data</h2>
+            <div id="exifOutput"></div>
+        </section>
+
+        <footer>
+            <p>EXIF Data Viewer Project</p>
+        </footer>
+        
+    </div>
 </body>
 </html>
