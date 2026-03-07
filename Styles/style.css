@@ -24,6 +24,10 @@ body {
     gap: 30px;
     max-width: 1500px;
     margin: auto;
+    background: #ffffff;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
 }
 
 .about-grid {
@@ -33,6 +37,14 @@ body {
         "nav"
         "about"
         "footer";
+
+    gap: 30px;
+    max-width: 1500px;
+    margin: auto;
+    background: #ffffff;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
 }
 
 header {
