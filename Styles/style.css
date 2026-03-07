@@ -68,17 +68,36 @@ nav {
 nav ul {
     list-style: none;
     display: flex;
-    gap: 25px;
-    padding: 10px 0;
+    border: 1px solid #d0d5dd;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+nav li {
+    width: 50%;
 }
 
 nav a {
+    display: block;
+    text-align: center;
+    padding: 14px 0;
     text-decoration: none;
     color: #333;
-    font-weight: 500;
+    font-weight: 600;
+    background: #f4f6f9;
+    transition: 0.2s;
+}
+
+nav li:first-child {
+    border-right: 1px solid #d0d5dd;
 }
 
 nav a:hover {
+    color: #0077cc;
+}
+
+nav a.active {
+    background: #ffffff;
     color: #0077cc;
 }
 
