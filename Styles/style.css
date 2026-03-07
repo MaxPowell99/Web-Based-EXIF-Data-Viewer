@@ -25,9 +25,15 @@ body {
     max-width: 1500px;
     margin: auto;
     background: #ffffff;
-    padding: 40px;
+    padding: 0;
     border-radius: 8px;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+}
+
+header, .preview, .exif-data, .about-section {
+    padding-left: 40px;
+    padding-right: 40px;
+    padding-top: 40px;
 }
 
 .about-grid {
@@ -61,6 +67,8 @@ header h1 {
 
 nav {
     grid-area: nav;
+    padding-left: 40px;
+    padding-right: 40px;
 }
 
 nav ul {
@@ -83,6 +91,12 @@ nav a:hover {
 .upload-section {
     grid-area: upload;
     text-align: center;
+    padding-left: 40px;
+    padding-right: 40px;
+}
+
+.upload-section h2 {
+    text-align: left;
 }
 
 .upload-box {
@@ -146,4 +160,11 @@ img.upload-icon {
 
 footer {
     grid-area: footer;
+    padding: 20px;
+    text-align: center;
+    background-color: #666;
+    width: 100%;
+    color:#ffffff;
+    font-size: 16px;
+    font-weight: 600;
 }
