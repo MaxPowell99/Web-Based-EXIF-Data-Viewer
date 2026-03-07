@@ -22,7 +22,7 @@ body {
         "footer footer";
 
     gap: 30px;
-    max-width: 1500px;
+    max-width: 80%;
     margin: auto;
     background: #ffffff;
     padding: 0;
@@ -45,11 +45,6 @@ header, .preview, .exif-data, .about-section {
         "footer";
 
     gap: 30px;
-    max-width: 1500px;
-    margin: auto;
-    background: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
 }
 
 header {
@@ -101,6 +96,7 @@ nav a:hover {
 .upload-box {
     border: 2px dashed #d0d5dd;
     padding: 40px;
+    margin-top: 10px;
     border-radius: 10px;
     background: #fafafa;
     transition: 0.3s;
