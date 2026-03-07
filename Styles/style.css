@@ -127,6 +127,11 @@ img.upload-icon {
     height: 100px;
 }
 
+.button-container {
+    display: flex;
+    justify-content: flex-end;
+}
+
 .extract-button {
     margin-top: 25px;
     padding: 12px 30px;
