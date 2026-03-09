@@ -1,19 +1,20 @@
-const imageInput = document.getElementById("imageInput");
-const extractButton = document.getElementById("extractButton");
-const imagePreview = document.getElementById("imagePreview");
-
 const uploadText = document.getElementById("uploadText");
 const fileInfo = document.getElementById("fileInfo");
+const uploadStatus = document.getElementById("uploadStatus");
 
-/* Detect file selection */
 imageInput.addEventListener("change", function () {
 
     const file = this.files[0];
 
     if (file) {
-        uploadText.textContent = "File selected:";
+
+        uploadText.textContent = "File ready";
         fileInfo.textContent = file.name;
+
+        uploadStatus.innerHTML =
+            '<i class="fa-solid fa-circle-check"></i> Ready for EXIF extraction';
     }
+
 });
 
 /* Show preview when button clicked */

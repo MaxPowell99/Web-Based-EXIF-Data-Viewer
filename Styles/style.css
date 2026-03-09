@@ -173,6 +173,18 @@ img.upload-icon {
     color: #0077cc;
 }
 
+#uploadStatus {
+    display: block;
+    margin-top: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #28a745;
+}
+
+#uploadStatus i {
+    margin-right: 6px;
+}
+
 .button-container {
     display: flex;
     justify-content: flex-end;
