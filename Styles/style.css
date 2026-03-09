@@ -166,6 +166,13 @@ img.upload-icon {
     display: none;
 }
 
+#fileInfo {
+    display: block;
+    margin-top: 5px;
+    font-weight: 600;
+    color: #0077cc;
+}
+
 .button-container {
     display: flex;
     justify-content: flex-end;
