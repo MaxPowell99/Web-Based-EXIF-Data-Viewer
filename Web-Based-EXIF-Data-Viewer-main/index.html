@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>EXIF Data Viewer</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="Styles/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/exif-js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="script.js" defer></script>
+</head>
+
+<body>
+    <div class="grid-container">
+        <header>
+                <h1>EXIF Data Viewer</h1>        
+        </header>
+
+        <nav>
+            <ul>
+                <li><a href="index.html" class="active">Upload</a></li>
+                <li><a href="about.html">About</a></li>
+            </ul>
+        </nav>
+
+        <section class="upload-section">
+            <h1>View your image's EXIF data</h1>
+            <h2>Upload an Image</h2>
+            <div class="upload-box">
+                <img src="Images/upload-image-icon.jpg" alt="Upload Icon" class="upload-icon">
+                <p>Select an image to extract EXIF data</p>
+                <input type="file" id="imageInput" accept="image/*">
+            </div>
+
+            <div class="button-container">
+                <button id="extractButton" class="extract-button">
+                    Extract EXIF Data
+                </button>
+
+                <button id="exportJSON">
+                    Export JSON
+                    </button>
+
+                    <button id="exportCSV">
+                        Export CSV
+                    </button>
+
+                    <button id="exportPDF">
+                        Export PDF
+                    </button>
+                </button>
+            </div>
+        </section>
+
+        <section class="preview">
+            <h2>Image Preview</h2>
+            <div id="imagePreview"></div>
+        </section>
+
+        <section class="exif-data">
+            <h2>EXIF Data</h2>
+            <div id="exifOutput"></div>
+        </section>
+
+        <footer>
+            <p><u>"The Grey Hats" - EXIF Data Viewer Project</u></p>
+        </footer>
+
+    </div>
+</body>
+</html>
