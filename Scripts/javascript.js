@@ -1,6 +1,8 @@
 const uploadText = document.getElementById("uploadText");
 const fileInfo = document.getElementById("fileInfo");
 const uploadStatus = document.getElementById("uploadStatus");
+const previewSection = document.querySelector(".preview");
+const exifSection = document.querySelector(".exif-data");
 
 imageInput.addEventListener("change", function () {
 
@@ -26,6 +28,10 @@ extractButton.addEventListener("click", function () {
         alert("Please upload an image first.");
         return;
     }
+
+    /* Show the hidden sections */
+    previewSection.style.display = "block";
+    exifSection.style.display = "block";
 
     const reader = new FileReader();
 
