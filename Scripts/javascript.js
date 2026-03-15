@@ -33,6 +33,8 @@ extractButton.addEventListener("click", function () {
     previewSection.style.display = "block";
     exifSection.style.display = "block";
 
+    previewSection.scrollIntoView({ behavior: "smooth" });
+
     const reader = new FileReader();
 
     reader.onload = function (event) {
