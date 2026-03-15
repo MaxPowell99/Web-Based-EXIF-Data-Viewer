@@ -114,11 +114,11 @@ nav a.active {
 
 .upload-box {
     border: 2px dashed #d0d5dd;
-    padding: 40px;
+    padding: 50px 20px;
     margin-top: 10px;
     border-radius: 10px;
     background: #fafafa;
-    transition: 0.3s;
+    transition: 0.25s;
 }
 
 .upload-box:hover {
@@ -127,8 +127,24 @@ nav a.active {
 }
 
 .upload-icon {
-    width: 80px;
+    font-size: 60px;
+    color: #0077cc;
     margin-bottom: 15px;
+}
+
+.upload-label {
+    cursor: pointer;
+    display: block;
+}
+
+.upload-label p {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.upload-label span {
+    font-size: 13px;
+    color: #777;
 }
 
 .upload-box p {
@@ -144,6 +160,29 @@ img {
 img.upload-icon {
     width: 100px;
     height: 100px;
+}
+
+#imageInput {
+    display: none;
+}
+
+#fileInfo {
+    display: block;
+    margin-top: 5px;
+    font-weight: 600;
+    color: #0077cc;
+}
+
+#uploadStatus {
+    display: block;
+    margin-top: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #28a745;
+}
+
+#uploadStatus i {
+    margin-right: 6px;
 }
 
 .button-container {
