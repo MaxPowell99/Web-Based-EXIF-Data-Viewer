@@ -1,3 +1,7 @@
+const imageInput = document.getElementById("imageInput");
+const extractButton = document.getElementById("extractButton");
+const imagePreview = document.getElementById("imagePreview");
+const exifOutput = document.getElementById("exifOutput");
 const uploadText = document.getElementById("uploadText");
 const fileInfo = document.getElementById("fileInfo");
 const uploadStatus = document.getElementById("uploadStatus");
@@ -39,13 +43,46 @@ extractButton.addEventListener("click", function () {
 
     reader.onload = function (event) {
 
+        /* Clear previous preview */
         imagePreview.innerHTML = "";
 
         const img = document.createElement("img");
         img.src = event.target.result;
 
         imagePreview.appendChild(img);
-    };
 
+
+        /* Extract EXIF metadata */
+        EXIF.getData(img, function () {
+
+            const allMetaData = EXIF.getAllTags(this);
+
+            /* If no EXIF exists */
+            if (Object.keys(allMetaData).length === 0) {
+                exifOutput.innerHTML = "<p>No EXIF data found in this image.</p>";
+                return;
+            }
+
+            let output = "<table>";
+
+            for (let tag in allMetaData) {
+                let value = allMetaData[tag];
+
+                /* Convert objects (GPS etc.) to readable text */
+                if (typeof value === "object") {
+                    value = JSON.stringify(value);
+                }
+
+                output += `
+                    <tr>
+                        <td><strong>${tag}</strong></td>
+                        <td>${value}</td>
+                    </tr>
+                `;
+            }
+            output += "</table>";
+            exifOutput.innerHTML = output;
+        });
+    };
     reader.readAsDataURL(file);
 });
