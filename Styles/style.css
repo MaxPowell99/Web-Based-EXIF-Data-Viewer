@@ -216,6 +216,11 @@ img.upload-icon {
     grid-area: exif;
 }
 
+.preview,
+.exif-data {
+    display: none;
+}
+
 footer {
     grid-area: footer;
     padding: 20px;
