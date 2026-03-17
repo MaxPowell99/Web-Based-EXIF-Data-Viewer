@@ -8,12 +8,12 @@ const uploadStatus = document.getElementById("uploadStatus");
 const previewSection = document.querySelector(".preview");
 const exifSection = document.querySelector(".exif-data");
 
+/* When user selects a file */
 imageInput.addEventListener("change", function () {
 
     const file = this.files[0];
 
     if (file) {
-
         uploadText.textContent = "File ready";
         fileInfo.textContent = file.name;
 
@@ -23,7 +23,7 @@ imageInput.addEventListener("change", function () {
 
 });
 
-/* Show preview when button clicked */
+/* When user clicks extract button */
 extractButton.addEventListener("click", function () {
 
     const file = imageInput.files[0];
@@ -33,7 +33,7 @@ extractButton.addEventListener("click", function () {
         return;
     }
 
-    /* Show the hidden sections */
+    /* Show hidden sections */
     previewSection.style.display = "block";
     exifSection.style.display = "block";
 
@@ -45,44 +45,86 @@ extractButton.addEventListener("click", function () {
 
         /* Clear previous preview */
         imagePreview.innerHTML = "";
+        exifOutput.innerHTML = "";
 
         const img = document.createElement("img");
         img.src = event.target.result;
 
         imagePreview.appendChild(img);
 
+        /* Wait for image to load */
+        img.onload = function () {
 
-        /* Extract EXIF metadata */
-        EXIF.getData(img, function () {
+            /* -------------------- */
+            /* BASIC FILE INFO */
+            /* -------------------- */
+            const basicInfo = `
+                <h3>Basic File Information</h3>
+                <p><strong>File Name:</strong> ${file.name}</p>
+                <p><strong>File Size:</strong> ${(file.size / 1024).toFixed(2)} KB</p>
+                <p><strong>File Type:</strong> ${file.type}</p>
+                <p><strong>Date Last Modified:</strong> ${new Date(file.lastModified).toLocaleString()}</p>
+            `;
 
-            const allMetaData = EXIF.getAllTags(this);
+            /* -------------------- */
+            /* IMAGE PROPERTIES */
+            /* -------------------- */
+            const imageProps = `
+                <h3>Image Properties</h3>
+                <p><strong>Width:</strong> ${img.naturalWidth} px</p>
+                <p><strong>Height:</strong> ${img.naturalHeight} px</p>
+            `;
 
-            /* If no EXIF exists */
-            if (Object.keys(allMetaData).length === 0) {
-                exifOutput.innerHTML = "<p>No EXIF data found in this image.</p>";
-                return;
-            }
+            /* -------------------- */
+            /* EXIF DATA */
+            /* -------------------- */
+            EXIF.getData(img, function () {
 
-            let output = "<table>";
+                const make = EXIF.getTag(this, "Make");
+                const model = EXIF.getTag(this, "Model");
+                const dateTaken = EXIF.getTag(this, "DateTimeOriginal");
+                const exposure = EXIF.getTag(this, "ExposureTime");
+                const iso = EXIF.getTag(this, "ISOSpeedRatings");
+                const aperture = EXIF.getTag(this, "FNumber");
+                const focalLength = EXIF.getTag(this, "FocalLength");
+                const software = EXIF.getTag(this, "Software");
 
-            for (let tag in allMetaData) {
-                let value = allMetaData[tag];
+                let gps = "Not available";
 
-                /* Convert objects (GPS etc.) to readable text */
-                if (typeof value === "object") {
-                    value = JSON.stringify(value);
+                const lat = EXIF.getTag(this, "GPSLatitude");
+                const lon = EXIF.getTag(this, "GPSLongitude");
+
+                if (lat && lon) {
+                    gps = lat.join(", ") + " / " + lon.join(", ");
                 }
 
-                output += `
-                    <tr>
-                        <td><strong>${tag}</strong></td>
-                        <td>${value}</td>
-                    </tr>
-                `;
-            }
-            output += "</table>";
-            exifOutput.innerHTML = output;
-        });
+                let exifSection = `<h3>EXIF Metadata</h3>`;
+
+                /* If no meaningful EXIF */
+                if (!make && !model && !dateTaken) {
+                    exifSection += `<p>No EXIF data found.</p>`;
+                } else {
+                    exifSection += `
+                        <p><strong>Camera Make:</strong> ${make || "N/A"}</p>
+                        <p><strong>Camera Model:</strong> ${model || "N/A"}</p>
+                        <p><strong>Date Taken:</strong> ${dateTaken || "N/A"}</p>
+                        <p><strong>Exposure Time:</strong> ${exposure || "N/A"}</p>
+                        <p><strong>ISO:</strong> ${iso || "N/A"}</p>
+                        <p><strong>Aperture:</strong> ${aperture || "N/A"}</p>
+                        <p><strong>Focal Length:</strong> ${focalLength || "N/A"}</p>
+                        <p><strong>GPS Location:</strong> ${gps}</p>
+                        <p><strong>Software:</strong> ${software || "N/A"}</p>
+                    `;
+                }
+
+                /* FINAL OUTPUT */
+                exifOutput.innerHTML =
+                    basicInfo +
+                    imageProps +
+                    exifSection;
+            });
+        };
     };
+
     reader.readAsDataURL(file);
 });
