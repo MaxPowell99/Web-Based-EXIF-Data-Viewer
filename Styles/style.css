@@ -210,10 +210,12 @@ img.upload-icon {
 
 .preview {
     grid-area: preview;
+    padding-right: 0;
 }
 
 .exif-data {
     grid-area: exif;
+    padding-left: 20px;
 }
 
 .preview,

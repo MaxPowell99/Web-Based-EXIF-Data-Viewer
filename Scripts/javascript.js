@@ -122,11 +122,8 @@ extractButton.addEventListener("click", function () {
                     basicInfo +
                     imageProps +
                     exifSection;
-
             });
-
         };
-
     };
 
     reader.readAsDataURL(file);
