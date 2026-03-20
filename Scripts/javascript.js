@@ -85,7 +85,7 @@ extractButton.addEventListener("click", function () {
         return;
     }
 
-    /* Show hidden sections */
+    /* Show hidden sections after upload */
     previewSection.style.display = "block";
     exifSection.style.display = "block";
 
@@ -110,17 +110,22 @@ extractButton.addEventListener("click", function () {
             /* BASIC FILE INFO */
             const basicInfo = `
                 <h3>Basic File Information</h3>
-                <p><strong>File Name:</strong> ${file.name}</p>
-                <p><strong>File Size:</strong> ${(file.size / 1024).toFixed(2)} KB</p>
-                <p><strong>File Type:</strong> ${file.type}</p>
-                <p><strong>Date Last Modified:</strong> ${new Date(file.lastModified).toLocaleString()}</p>
+                <table class="exif-table">
+                    <tr><th>Property</th><th>Value</th></tr>
+                    <tr><td>File Name</td><td>${file.name}</td></tr>
+                    <tr><td>File Size</td><td>${(file.size / 1024).toFixed(2)} KB</td></tr>
+                    <tr><td>File Type</td><td>${file.type}</td></tr>
+                    <tr><td>Date Last Modified</td><td>${new Date(file.lastModified).toLocaleString()}</td></tr>
             `;
 
             /* IMAGE PROPERTIES */
             const imageProps = `
                 <h3>Image Properties</h3>
-                <p><strong>Width:</strong> ${img.naturalWidth} px</p>
-                <p><strong>Height:</strong> ${img.naturalHeight} px</p>
+                <table class="exif-table">
+                    <tr><th>Property</th><th>Value</th></tr>
+                    <tr><td>Width</td><td>${img.naturalWidth} px</td></tr>
+                    <tr><td>Height</td><td>${img.naturalHeight} px</td></tr>
+                </table>
             `;
 
             /* EXIF DATA */
@@ -146,20 +151,23 @@ extractButton.addEventListener("click", function () {
 
                 let exifSection = `<h3>EXIF Metadata</h3>`;
 
-                /* If no EXIF */
+                /* If no EXIF data*/
                 if (!make && !model && !dateTaken) {
                     exifSection += `<p>No EXIF data found.</p>`;
                 } else {
                     exifSection += `
-                        <p><strong>Camera Make:</strong> ${make || "N/A"}</p>
-                        <p><strong>Camera Model:</strong> ${model || "N/A"}</p>
-                        <p><strong>Date Taken:</strong> ${dateTaken || "N/A"}</p>
-                        <p><strong>Exposure Time:</strong> ${exposure || "N/A"}</p>
-                        <p><strong>ISO:</strong> ${iso || "N/A"}</p>
-                        <p><strong>Aperture:</strong> ${aperture || "N/A"}</p>
-                        <p><strong>Focal Length:</strong> ${focalLength || "N/A"}</p>
-                        <p><strong>GPS Location:</strong> ${gps}</p>
-                        <p><strong>Software:</strong> ${software || "N/A"}</p>
+                        <table class="exif-table">
+                            <tr><th>Property</th><th>Value</th></tr>
+                            <tr><td>Camera Make</td><td>${make || "N/A"}</td></tr>
+                            <tr><td>Camera Model</td><td>${model || "N/A"}</td></tr>
+                            <tr><td>Date Taken</td><td>${dateTaken || "N/A"}</td></tr>
+                            <tr><td>Exposure Time</td><td>${exposure || "N/A"}</td></tr>
+                            <tr><td>ISO</td><td>${iso || "N/A"}</td></tr>
+                            <tr><td>Aperture</td><td>${aperture || "N/A"}</td></tr>
+                            <tr><td>Focal Length</td><td>${focalLength || "N/A"}</td></tr>
+                            <tr><td>GPS Location</td><td>${gps}</td></tr>
+                            <tr><td>Software</td><td>${software || "N/A"}</td></tr>
+                        </table>
                     `;
                 }
 

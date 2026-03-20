@@ -241,6 +241,34 @@ img.upload-icon {
     display: none;
 }
 
+.exif-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.exif-table th,
+.exif-table td {
+    border: 1px solid #d0d5dd;
+    padding: 10px;
+    text-align: left;
+}
+
+.exif-table td {
+    word-break: break-word;
+}
+
+.exif-table th {
+    background-color: #f4f6f9;
+    font-weight: 600;
+}
+
+.exif-table tr:nth-child(even) {
+    background-color: #fafafa;
+}
+
 footer {
     grid-area: footer;
     padding: 20px;
