@@ -148,8 +148,26 @@ nav a.active {
 }
 
 .upload-box p {
-    margin-bottom: 15px;
+    margin-bottom: 5px;
     color: #666;
+}
+
+.upload-box.error {
+    border-color: #dc3545;
+    background: #fff5f5;
+}
+
+.upload-box.success {
+    border-color: #28a745;
+    background: #f0fff4;
+}
+
+#uploadStatus.error {
+    color: #dc3545;
+}
+
+#uploadStatus.success {
+    color: #28a745;
 }
 
 img {
