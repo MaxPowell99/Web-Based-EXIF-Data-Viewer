@@ -116,6 +116,7 @@ extractButton.addEventListener("click", function () {
                     <tr><td>File Size</td><td>${(file.size / 1024).toFixed(2)} KB</td></tr>
                     <tr><td>File Type</td><td>${file.type}</td></tr>
                     <tr><td>Date Last Modified</td><td>${new Date(file.lastModified).toLocaleString()}</td></tr>
+                </table>
             `;
 
             /* IMAGE PROPERTIES */
