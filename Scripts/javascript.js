@@ -13,9 +13,7 @@ function showError(message) {
     uploadText.textContent = "Invalid File Type - Click again to try another file.";
     fileInfo.textContent = message;
 
-    uploadStatus.innerHTML =
-        '<i class="fa-solid fa-circle-xmark"></i> Upload Failed';
-    
+    uploadStatus.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> Upload Failed';
     uploadStatus.classList.add("error");
     uploadStatus.classList.remove("success");
 
@@ -27,7 +25,6 @@ function showError(message) {
 
 /* When user selects a file */
 imageInput.addEventListener("change", function () {
-
     const file = this.files[0];
     if (!file) return;
 
@@ -68,8 +65,7 @@ imageInput.addEventListener("change", function () {
     uploadText.textContent = "Upload Complete";
     fileInfo.textContent = file.name;
 
-    uploadStatus.innerHTML =
-        '<i class="fa-solid fa-circle-check"></i> Ready for EXIF extraction';
+    uploadStatus.innerHTML = '<i class="fa-solid fa-circle-check"></i> Ready for EXIF extraction';
     
     uploadStatus.classList.add("success");
     uploadStatus.classList.remove("error");
@@ -109,24 +105,28 @@ extractButton.addEventListener("click", function () {
 
             /* BASIC FILE INFO */
             const basicInfo = `
-                <h3>Basic File Information</h3>
-                <table class="exif-table">
-                    <tr><th>Property</th><th>Value</th></tr>
-                    <tr><td>File Name</td><td>${file.name}</td></tr>
-                    <tr><td>File Size</td><td>${(file.size / 1024).toFixed(2)} KB</td></tr>
-                    <tr><td>File Type</td><td>${file.type}</td></tr>
-                    <tr><td>Date Last Modified</td><td>${new Date(file.lastModified).toLocaleString()}</td></tr>
-                </table>
+                <div class="exif-section">
+                    <h3>Basic File Information</h3>
+                    <table class="exif-table">
+                        <tr><th>Property</th><th>Value</th></tr>
+                        <tr><td>File Name</td><td>${file.name}</td></tr>
+                        <tr><td>File Size</td><td>${(file.size / 1024).toFixed(2)} KB</td></tr>
+                        <tr><td>File Type</td><td>${file.type}</td></tr>
+                        <tr><td>Date Last Modified</td><td>${new Date(file.lastModified).toLocaleString()}</td></tr>
+                    </table>
+                </div>
             `;
 
             /* IMAGE PROPERTIES */
             const imageProps = `
-                <h3>Image Properties</h3>
-                <table class="exif-table">
-                    <tr><th>Property</th><th>Value</th></tr>
-                    <tr><td>Width</td><td>${img.naturalWidth} px</td></tr>
-                    <tr><td>Height</td><td>${img.naturalHeight} px</td></tr>
-                </table>
+                <div class="exif-section">
+                    <h3>Image Properties</h3>
+                    <table class="exif-table">
+                        <tr><th>Property</th><th>Value</th></tr>
+                        <tr><td>Width</td><td>${img.naturalWidth} px</td></tr>
+                        <tr><td>Height</td><td>${img.naturalHeight} px</td></tr>
+                    </table>
+                </div>
             `;
 
             /* EXIF DATA */
@@ -142,7 +142,6 @@ extractButton.addEventListener("click", function () {
                 const software = EXIF.getTag(this, "Software");
 
                 let gps = "Not available";
-
                 const lat = EXIF.getTag(this, "GPSLatitude");
                 const lon = EXIF.getTag(this, "GPSLongitude");
 
@@ -150,13 +149,13 @@ extractButton.addEventListener("click", function () {
                     gps = lat.join(", ") + " / " + lon.join(", ");
                 }
 
-                let exifSection = `<h3>EXIF Metadata</h3>`;
+                let exifDataSection = `<div class="exif-section"><h3>EXIF Metadata</h3>`;
 
                 /* If no EXIF data*/
                 if (!make && !model && !dateTaken) {
-                    exifSection += `<p>No EXIF data found.</p>`;
+                    exifDataSection += `<p>No EXIF data found.</p>`;
                 } else {
-                    exifSection += `
+                    exifDataSection += `
                         <table class="exif-table">
                             <tr><th>Property</th><th>Value</th></tr>
                             <tr><td>Camera Make</td><td>${make || "N/A"}</td></tr>
@@ -173,10 +172,9 @@ extractButton.addEventListener("click", function () {
                 }
 
                 /* FINAL OUTPUT */
-                exifOutput.innerHTML =
-                    basicInfo +
-                    imageProps +
-                    exifSection;
+                exifDataSection += `</div>`;
+
+                exifOutput.innerHTML = basicInfo + imageProps + exifDataSection;
             });
         };
     };
