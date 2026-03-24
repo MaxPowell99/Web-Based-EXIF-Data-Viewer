@@ -37,7 +37,7 @@
                 </label>
             </div>
 
-            <div class="button-container">
+            <div class="extract-button-container">
                 <button id="extractButton" class="extract-button">
                     Extract EXIF Data
                 </button>
@@ -52,6 +52,21 @@
         <section class="exif-data">
             <h2>EXIF Data</h2>
             <div id="exifOutput"></div>
+        </section>
+
+        <section class="export">
+            <h2>Export EXIF Data</h2>
+            <div class="export-controls">
+                <select id="ExportFormat">
+                    <option value="">Select format</option>
+                    <option value="json">.json</option>
+                    <option value="csv">.csv</option>
+                    <option value="xml">.xml</option>
+                    <option value="php">.php</option>
+                    <option value="pdf">.pdf</option>
+                </select>
+                <button id="exportButton">Export</button>
+            </div>
         </section>
 
         <footer>
