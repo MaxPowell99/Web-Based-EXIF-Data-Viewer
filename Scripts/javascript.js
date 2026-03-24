@@ -8,6 +8,10 @@ const uploadStatus = document.getElementById("uploadStatus");
 const previewSection = document.querySelector(".preview");
 const exifSection = document.querySelector(".exif-data");
 const uploadBox = document.querySelector(".upload-box");
+const exportButton = document.getElementById("exportButton");
+const exportFormat = document.getElementById("exportFormat");
+const exportSection = document.querySelector(".export");
+let exifDataStore = {};
 
 function showError(message) {
     uploadText.textContent = "Invalid File Type - Click again to try another file.";
@@ -84,6 +88,7 @@ extractButton.addEventListener("click", function () {
     /* Show hidden sections after upload */
     previewSection.style.display = "block";
     exifSection.style.display = "block";
+    exportSection.style.display = "block";
 
     previewSection.scrollIntoView({ behavior: "smooth" });
 
@@ -104,27 +109,35 @@ extractButton.addEventListener("click", function () {
         img.onload = function () {
 
             /* BASIC FILE INFO */
+            const basicInfoData = {
+                "File Name": file.name,
+                "File Size": (file.size / 1024).toFixed(2) + " KB",
+                "File Type": file.type,
+                "Date Last Modified": new Date(file.lastModified).toLocaleString()
+            };
+
             const basicInfo = `
                 <div class="exif-section">
                     <h3>Basic File Information</h3>
                     <table class="exif-table">
                         <tr><th>Property</th><th>Value</th></tr>
-                        <tr><td>File Name</td><td>${file.name}</td></tr>
-                        <tr><td>File Size</td><td>${(file.size / 1024).toFixed(2)} KB</td></tr>
-                        <tr><td>File Type</td><td>${file.type}</td></tr>
-                        <tr><td>Date Last Modified</td><td>${new Date(file.lastModified).toLocaleString()}</td></tr>
+                        ${Object.entries(basicInfoData).map(([k,v]) => `<tr><td>${k}</td><td>${v}</td></tr>`).join("")}
                     </table>
                 </div>
             `;
 
             /* IMAGE PROPERTIES */
+            const imagePropsData = {
+                "Width": img.naturalWidth + " px",
+                "Height": img.naturalHeight + " px"
+            };
+
             const imageProps = `
                 <div class="exif-section">
                     <h3>Image Properties</h3>
                     <table class="exif-table">
                         <tr><th>Property</th><th>Value</th></tr>
-                        <tr><td>Width</td><td>${img.naturalWidth} px</td></tr>
-                        <tr><td>Height</td><td>${img.naturalHeight} px</td></tr>
+                        ${Object.entries(imagePropsData).map(([k,v]) => `<tr><td>${k}</td><td>${v}</td></tr>`).join("")}
                     </table>
                 </div>
             `;
@@ -135,38 +148,44 @@ extractButton.addEventListener("click", function () {
                 const make = EXIF.getTag(this, "Make");
                 const model = EXIF.getTag(this, "Model");
                 const dateTaken = EXIF.getTag(this, "DateTimeOriginal");
-                const exposure = EXIF.getTag(this, "ExposureTime");
-                const iso = EXIF.getTag(this, "ISOSpeedRatings");
-                const aperture = EXIF.getTag(this, "FNumber");
-                const focalLength = EXIF.getTag(this, "FocalLength");
-                const software = EXIF.getTag(this, "Software");
 
-                let gps = "Not available";
+                const exifData = {
+                    "Camera Make": make || "N/A",
+                    "Camera Model": model || "N/A",
+                    "Date Taken": dateTaken || "N/A",
+                    "Exposure Time": EXIF.getTag(this, "ExposureTime") || "N/A",
+                    "ISO": EXIF.getTag(this, "ISOSpeedRatings") || "N/A",
+                    "Aperture": EXIF.getTag(this, "FNumber") || "N/A",
+                    "Focal Length": EXIF.getTag(this, "FocalLength") || "N/A",
+                    "Software": EXIF.getTag(this, "Software") || "N/A",
+                };
+
                 const lat = EXIF.getTag(this, "GPSLatitude");
                 const lon = EXIF.getTag(this, "GPSLongitude");
+                let gps = "Not available";
 
                 if (lat && lon) {
                     gps = lat.join(", ") + " / " + lon.join(", ");
                 }
 
+                exifData["GPS Location"] = gps;
+
+                /* Store data for export*/
+                exifDataStore = {
+                    basic: basicInfoData,
+                    image: imagePropsData,
+                    exif: exifData
+                };
+
                 let exifDataSection = `<div class="exif-section"><h3>EXIF Metadata</h3>`;
 
-                /* If no EXIF data*/
-                if (!make && !model && !dateTaken) {
+                 if (!make && !model && !dateTaken) {
                     exifDataSection += `<p>No EXIF data found.</p>`;
                 } else {
                     exifDataSection += `
                         <table class="exif-table">
                             <tr><th>Property</th><th>Value</th></tr>
-                            <tr><td>Camera Make</td><td>${make || "N/A"}</td></tr>
-                            <tr><td>Camera Model</td><td>${model || "N/A"}</td></tr>
-                            <tr><td>Date Taken</td><td>${dateTaken || "N/A"}</td></tr>
-                            <tr><td>Exposure Time</td><td>${exposure || "N/A"}</td></tr>
-                            <tr><td>ISO</td><td>${iso || "N/A"}</td></tr>
-                            <tr><td>Aperture</td><td>${aperture || "N/A"}</td></tr>
-                            <tr><td>Focal Length</td><td>${focalLength || "N/A"}</td></tr>
-                            <tr><td>GPS Location</td><td>${gps}</td></tr>
-                            <tr><td>Software</td><td>${software || "N/A"}</td></tr>
+                            ${Object.entries(exifData).map(([k,v]) => `<tr><td>${k}</td><td>${v}</td></tr>`).join("")}
                         </table>
                     `;
                 }

@@ -295,9 +295,7 @@ img.upload-icon {
 }
 
 .export {
-    grid-area: export; 
-    padding-left: 20px; 
-    margin-top: 20px;
+    grid-area: export;
 }
 
 .export-controls { 
