@@ -237,8 +237,7 @@ img.upload-icon {
     padding-left: 20px;
 }
 
-.preview,
-.exif-data {
+.preview, .exif-data, .export {
     display: none;
 }
 
