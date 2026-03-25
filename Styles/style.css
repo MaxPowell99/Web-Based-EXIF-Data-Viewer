@@ -325,13 +325,37 @@ img.upload-icon {
     background-color: #005fa3;
 }
 
+.about-section {
+    max-width: 900px;
+    margin: 40px auto;
+    background: #ffffff;
+    line-height: 1.6;
+}
 
+.about-section h2 {
+    font-size: 28px;
+    margin-bottom: 20px;
+}
 
+.about-section h3 {
+    font-size: 20px;
+    margin-top: 25px;
+    margin-bottom: 10px;
+}
 
+.about-section p {
+    margin-bottom: 15px;
+    color: #333;
+}
 
+.about-section ul {
+    margin-left: 20px;
+    margin-bottom: 15px
+}
 
-
-
+.about-section li {
+    margin-bottom: 8px;
+}
 
 footer {
     grid-area: footer;
