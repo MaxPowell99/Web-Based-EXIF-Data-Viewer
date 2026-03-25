@@ -24,7 +24,7 @@ function showError(message) {
     uploadBox.classList.add("error");
     uploadBox.classList.remove("success");
 
-    imageInput.value = ""; // reset file input
+    imageInput.value = ""; /* Reset file input */
 }
 
 /* When user selects a file */
@@ -200,3 +200,99 @@ extractButton.addEventListener("click", function () {
 
     reader.readAsDataURL(file);
 });
+
+/* Export Function */
+exportButton.addEventListener("click", function () {
+
+    if (!exifDataStore || Object.keys(exifDataStore).length === 0) {
+        alert("No EXIF data to export.");
+        return;
+    }
+
+    const format = exportFormat.value;
+
+    if (!format) {
+        alert("Please select an export format.");
+        return;
+    }
+
+    let content = "";
+    let fileName = "exif_data";
+
+    /* JSON */
+    if (format === "json") {
+        content = JSON.stringify(exifDataStore, null, 2);
+        downloadFile(content, "application/json", fileName + ".json");
+    }
+
+    /* CSV */
+    else if (format === "csv") {
+        let rows = [];
+
+        for (let section in exifDataStore) {
+            rows.push(`"${section.toUpperCase()}"`);
+            for (let key in exifDataStore[section]) {
+                rows.push(`"${key}","${exifDataStore[section][key]}"`);
+            }
+            rows.push("");
+        }
+
+        content = rows.join("\n");
+        downloadFile(content, "text/csv", fileName + ".csv");
+    }
+
+    /* XML */
+    else if (format === "xml") {
+        content = `<exifData>\n`;
+
+        for (let section in exifDataStore) {
+            content += `  <${section}>\n`;
+            for (let key in exifDataStore[section]) {
+                content += `    <${key.replace(/\s/g, "_")}>${exifDataStore[section][key]}</${key.replace(/\s/g, "_")}>\n`;
+            }
+            content += `  </${section}>\n`;
+        }
+
+        content += `</exifData>`;
+        downloadFile(content, "application/xml", fileName + ".xml");
+    }
+
+    /* PHP */
+    else if (format === "php") {
+        content = "<?php\n$exifData = " + JSON.stringify(exifDataStore, null, 2) + ";\n?>";
+        downloadFile(content, "application/x-httpd-php", fileName + ".php");
+    }
+
+    /* PDF */
+    else if (format === "pdf") {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    let y = 10;
+    doc.text("EXIF Data", 10, y);
+    y += 10;
+    for (let section in exifDataStore) {
+        doc.text(section.toUpperCase(), 10, y);
+        y += 8;
+        for (let key in exifDataStore[section]) {
+            doc.text(`${key}: ${exifDataStore[section][key]}`, 10, y);
+            y += 6;
+            if (y > 280) { doc.addPage(); y = 10; }
+        }
+        y += 6;
+    }
+    doc.save("exif_data.pdf");
+}
+});
+
+/* Download Function */
+function downloadFile(content, type, filename) {
+    const blob = new Blob([content], { type });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    a.click();
+
+    URL.revokeObjectURL(url);
+}
