@@ -4,14 +4,18 @@
     <title>EXIF Data Viewer</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
     <link rel="stylesheet" href="Styles/style.css">
-    <script src="script.js" defer></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/exif-js/2.3.0/exif.min.js"></script>
+    <script src="Scripts/javascript.js" defer></script>
 </head>
 
 <body>
     <div class="grid-container">
         <header>
-                <h1>EXIF Data Viewer</h1>        
+            <h1>EXIF Data Viewer</h1>        
         </header>
 
         <nav>
@@ -22,15 +26,18 @@
         </nav>
 
         <section class="upload-section">
-            <h1>View your image's EXIF data</h1>
-            <h2>Upload an Image</h2>
+            <h2>View your image's EXIF data</h2>
             <div class="upload-box">
-                <img src="Images/upload-image-icon.jpg" alt="Upload Icon" class="upload-icon">
-                <p>Select an image to extract EXIF data</p>
-                <input type="file" id="imageInput" accept="image/*">
+                <label for="imageInput" class="upload-label">
+                    <i class="fa-solid fa-cloud-arrow-up upload-icon"></i>
+                    <p id="uploadText">Click to upload an image</p>
+                    <span id="uploadStatus"></span>
+                    <span id="fileInfo">JPG, JPEG, TIF, TIFF Supported</span>
+                    <input type="file" id="imageInput" accept=".jpg,.jpeg,.tif,.tiff,.png,.heic,.gif,.webp">
+                </label>
             </div>
 
-            <div class="button-container">
+            <div class="extract-button-container">
                 <button id="extractButton" class="extract-button">
                     Extract EXIF Data
                 </button>
@@ -47,10 +54,24 @@
             <div id="exifOutput"></div>
         </section>
 
+        <section class="export">
+            <h2>Export EXIF Data</h2>
+            <div class="export-controls">
+                <select id="ExportFormat">
+                    <option value="">Select format</option>
+                    <option value="json">.json</option>
+                    <option value="csv">.csv</option>
+                    <option value="xml">.xml</option>
+                    <option value="php">.php</option>
+                    <option value="pdf">.pdf</option>
+                </select>
+                <button id="exportButton">Export</button>
+            </div>
+        </section>
+
         <footer>
             <p><u>"The Grey Hats" - EXIF Data Viewer Project</u></p>
         </footer>
-
     </div>
 </body>
 </html>
