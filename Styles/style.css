@@ -19,6 +19,7 @@ body {
         "nav nav"
         "upload upload"
         "preview exif"
+        "export exif"
         "footer footer";
 
     gap: 30px;
@@ -30,7 +31,7 @@ body {
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
 }
 
-header, .preview, .exif-data, .about-section {
+header, .preview, .exif-data, .export, .about-section {
     padding-left: 80px;
     padding-right: 80px;
     padding-top: 40px;
@@ -203,7 +204,7 @@ img.upload-icon {
     margin-right: 6px;
 }
 
-.button-container {
+.extract-button-container {
     display: flex;
     justify-content: flex-end;
 }
@@ -236,8 +237,7 @@ img.upload-icon {
     padding-left: 20px;
 }
 
-.preview,
-.exif-data {
+.preview, .exif-data, .export {
     display: none;
 }
 
@@ -293,6 +293,45 @@ img.upload-icon {
 .exif-table tr:nth-child(even) {
     background-color: #fafafa;
 }
+
+.export {
+    grid-area: export;
+}
+
+.export-controls { 
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.export-controls select {
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #d0d5dd;
+    font-size: 14px;
+}
+
+.export-controls button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    background-color: #0077cc;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.export-controls button:hover {
+    background-color: #005fa3;
+}
+
+
+
+
+
+
+
+
 
 footer {
     grid-area: footer;

@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/exif-js/2.3.0/exif.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
     <script src="Scripts/javascript.js" defer></script>
 </head>
 
@@ -37,7 +39,7 @@
                 </label>
             </div>
 
-            <div class="button-container">
+            <div class="extract-button-container">
                 <button id="extractButton" class="extract-button">
                     Extract EXIF Data
                 </button>
@@ -52,6 +54,21 @@
         <section class="exif-data">
             <h2>EXIF Data</h2>
             <div id="exifOutput"></div>
+        </section>
+
+        <section class="export">
+            <h2>Export EXIF Data</h2>
+            <div class="export-controls">
+                <select id="exportFormat">
+                    <option value="">Select format</option>
+                    <option value="pdf">.pdf</option>
+                    <option value="csv">.csv</option>
+                    <option value="json">.json</option>
+                    <option value="php">.php</option>
+                    <option value="xml">.xml</option>
+                </select>
+                <button id="exportButton">Export</button>
+            </div>
         </section>
 
         <footer>
