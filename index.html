@@ -58,16 +58,21 @@
 
         <section class="export">
             <h2>Export EXIF Data</h2>
-            <div class="export-controls">
-                <select id="exportFormat">
-                    <option value="">Select format</option>
-                    <option value="pdf">.pdf</option>
-                    <option value="csv">.csv</option>
-                    <option value="json">.json</option>
-                    <option value="php">.php</option>
-                    <option value="xml">.xml</option>
-                </select>
-                <button id="exportButton">Export</button>
+            <div class="export-container">
+                <h3>Choose a Format</h3>
+                <div class="export-controls">
+                    <select id="exportFormat">
+                        <option value="">Select format</option>
+                        <option value="pdf">.pdf</option>
+                        <option value="csv">.csv</option>
+                        <option value="json">.json</option>
+                        <option value="php">.php</option>
+                        <option value="xml">.xml</option>
+                    </select>
+                    <button id="exportButton">
+                        <i class="fa-solid fa-download"></i> Export
+                    </button>
+                </div>
             </div>
         </section>
 

@@ -224,97 +224,97 @@ exportButton.addEventListener("click", function () {
     if (format === "json") {
         const content = JSON.stringify(exifDataStore, null, 2);
         downloadFile(content, "application/json", fileName + ".json");
-    36, 36, 36}
-
-/* CSV */
-else if (format === "csv") {
-    let rows = [];
-    for (let section in exifDataStore) {
-        rows.push(`"${section.toUpperCase()}"`);
-        for (let key in exifDataStore[section]) {
-            rows.push(`"${key}","${exifDataStore[section][key]}"`);
-        }
-        rows.push("");
     }
-    const content = rows.join("\n");
-    downloadFile(content, "text/csv", fileName + ".csv");
-}
 
-/* XML */
-else if (format === "xml") {
-    let content = `<exifData>\n`;
-    for (let section in exifDataStore) {
-        content += `  <${section}>\n`;
-        for (let key in exifDataStore[section]) {
-            content += `    <${key.replace(/\s/g, "_")}>${exifDataStore[section][key]}</${key.replace(/\s/g, "_")}>\n`;
+    /* CSV */
+    else if (format === "csv") {
+        let rows = [];
+        for (let section in exifDataStore) {
+            rows.push(`"${section.toUpperCase()}"`);
+            for (let key in exifDataStore[section]) {
+                rows.push(`"${key}","${exifDataStore[section][key]}"`);
+            }
+            rows.push("");
         }
-        content += `  </${section}>\n`;
+        const content = rows.join("\n");
+        downloadFile(content, "text/csv", fileName + ".csv");
     }
-    content += `</exifData>`;
-    downloadFile(content, "application/xml", fileName + ".xml");
-}
 
-/* PHP */
-else if (format === "php") {
-    const content = "<?php\n$exifData = " + JSON.stringify(exifDataStore, null, 2) + ";\n?>";
-    downloadFile(content, "application/x-httpd-php", fileName + ".php");
-}
+    /* XML */
+    else if (format === "xml") {
+        let content = `<exifData>\n`;
+        for (let section in exifDataStore) {
+            content += `  <${section}>\n`;
+            for (let key in exifDataStore[section]) {
+                content += `    <${key.replace(/\s/g, "_")}>${exifDataStore[section][key]}</${key.replace(/\s/g, "_")}>\n`;
+            }
+            content += `  </${section}>\n`;
+        }
+        content += `</exifData>`;
+        downloadFile(content, "application/xml", fileName + ".xml");
+    }
 
-/* PDF */
-else if (format === "pdf") {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-    let y = 10;
+    /* PHP */
+    else if (format === "php") {
+        const content = "<?php\n$exifData = " + JSON.stringify(exifDataStore, null, 2) + ";\n?>";
+        downloadFile(content, "application/x-httpd-php", fileName + ".php");
+    }
 
-    // Title uses the base file name
-    doc.setFontSize(18);
-    doc.text(`${baseFileName} - EXIF Data`, 105, y, { align: "center" });
-    y += 10;
+    /* PDF */
+    else if (format === "pdf") {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        let y = 10;
 
-    doc.setFontSize(12);
+        // Title uses the base file name
+        doc.setFontSize(18);
+        doc.text(`${baseFileName} - EXIF Data`, 105, y, { align: "center" });
+        y += 10;
 
-    // Basic File Information Table
-    const basicRows = Object.entries(exifDataStore.basic).map(([key, value]) => [key, value]);
-    doc.autoTable({
-        startY: y,
-        head: [["Property", "Value"]],
-        body: basicRows,
-        theme: "grid",
-        styles: { fontSize: 10 },
-        headStyles: { fillColor: [36, 36, 36] },
-    });
-    y = doc.lastAutoTable.finalY + 10;
+        doc.setFontSize(12);
 
-    // Image Properties Table
-    const imageRows = Object.entries(exifDataStore.image).map(([key, value]) => [key, value]);
-    doc.autoTable({
-        startY: y,
-        head: [["Property", "Value"]],
-        body: imageRows,
-        theme: "grid",
-        styles: { fontSize: 10 },
-        headStyles: { fillColor: [36, 36, 36] },
-    });
-    y = doc.lastAutoTable.finalY + 10;
+        // Basic File Information Table
+        const basicRows = Object.entries(exifDataStore.basic).map(([key, value]) => [key, value]);
+        doc.autoTable({
+            startY: y,
+            head: [["Property", "Value"]],
+            body: basicRows,
+            theme: "grid",
+            styles: { fontSize: 10 },
+            headStyles: { fillColor: [36, 36, 36] },
+        });
+        y = doc.lastAutoTable.finalY + 10;
 
-    // EXIF Metadata Table
-    const exifRows = Object.entries(exifDataStore.exif).map(([key, value]) => [key, value]);
-    doc.autoTable({
-        startY: y,
-        head: [["Property", "Value"]],
-        body: exifRows,
-        theme: "grid",
-        styles: { fontSize: 10 },
-        headStyles: { fillColor: [36, 36, 36] },
-        didDrawPage: function () {
-            const page = doc.getNumberOfPages();
-            doc.setFontSize(8);
-            doc.text(`Page ${page}`, 105, doc.internal.pageSize.height - 10, { align: "center" });
-        },
-    });
+        // Image Properties Table
+        const imageRows = Object.entries(exifDataStore.image).map(([key, value]) => [key, value]);
+        doc.autoTable({
+            startY: y,
+            head: [["Property", "Value"]],
+            body: imageRows,
+            theme: "grid",
+            styles: { fontSize: 10 },
+            headStyles: { fillColor: [36, 36, 36] },
+        });
+        y = doc.lastAutoTable.finalY + 10;
 
-    doc.save(fileName + ".pdf");
-}
+        // EXIF Metadata Table
+        const exifRows = Object.entries(exifDataStore.exif).map(([key, value]) => [key, value]);
+        doc.autoTable({
+            startY: y,
+            head: [["Property", "Value"]],
+            body: exifRows,
+            theme: "grid",
+            styles: { fontSize: 10 },
+            headStyles: { fillColor: [36, 36, 36] },
+            didDrawPage: function () {
+                const page = doc.getNumberOfPages();
+                doc.setFontSize(8);
+                doc.text(`Page ${page}`, 105, doc.internal.pageSize.height - 10, { align: "center" });
+            },
+        });
+
+        doc.save(fileName + ".pdf");
+    }
 });
 
 /* Download Function */
