@@ -329,3 +329,44 @@ function downloadFile(content, type, filename) {
 
     URL.revokeObjectURL(url);
 }
+
+let uploadedImage = null;
+
+const fileInput = document.getElementById("imageInput");
+const removeBtn = document.getElementById("removeExifBtn");
+
+fileInput.addEventListener("change", function() {
+    const file = this.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function (e) {
+        uploadedImage = new Image();
+        uploadedImage.src = e.target.result;
+
+        removeBtn.disabled = false;
+    };
+    reader.readAsDataURL(file);
+});
+
+removeBtn.addEventListener("click", function () {
+    if (!uploadedImage) {
+        alert("You must upload an image!");
+        return;
+    }
+
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+
+    canvas.width = uploadedImage.width;
+    canvas.height = uploadedImage.height;
+
+    ctx.drawImage(uploadedImage, 0, 0);
+
+    canvas.toBlob(function (blob) {
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = "clean-image.jpg";
+        link.click();
+    }, "image/jpeg", 0.95);
+});
