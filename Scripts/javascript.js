@@ -98,11 +98,11 @@ extractButton.addEventListener("click", function () {
 
         /* Clear previous preview */
         imagePreview.innerHTML = "";
+        /* Clear previous exif data */
         exifOutput.innerHTML = "";
 
         const img = document.createElement("img");
         img.src = event.target.result;
-
         imagePreview.appendChild(img);
 
         /* Wait for image to load */
