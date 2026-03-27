@@ -20,6 +20,7 @@ body {
         "upload upload"
         "preview exif"
         "export exif"
+        "remove exif"
         "footer footer";
 
     gap: 30px;
@@ -31,14 +32,14 @@ body {
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
 }
 
-header, .preview, .exif-data, .export, .about-section {
+header, .preview, .exif-data, .export, .remove-exif, .about-section {
     padding-left: 80px;
     padding-right: 80px;
     margin-top: 10px;
     
 }
 
- .preview h2, .exif-data h2, .export h2 {
+ .preview h2, .exif-data h2, .export h2, .remove-exif h2 {
     margin-bottom: 10px;
  }
 
@@ -261,7 +262,7 @@ img.upload-icon {
     padding-left: 20px;
 }
 
-.preview, .exif-data, .export {
+.preview, .exif-data, .export, .remove-exif {
     display: none;
 }
 
@@ -366,6 +367,55 @@ img.upload-icon {
     background-color: #005fa3;
 }
 
+.remove-exif {
+    grid-area: remove;
+    padding-right: 0;
+}
+
+.remove-exif-container {
+    background: #fafafa;
+    border: 1px solid #e0e4ea;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.remove-text {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+}
+
+.remove-text h3 {
+    font-size: 18px;
+    color: #333;
+}
+
+.remove-exif button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    background-color: #0077cc;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.remove-exif button:hover {
+    background-color: #005fa3;
+}
+
+.remove-exif button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.remove-exif button:disabled:hover {
+    background-color: #ccc;
+}
+
 .about-section {
     background: #ffffff;
     line-height: 1.6;
@@ -418,10 +468,11 @@ footer {
             "preview"
             "exif"
             "export"
+            "remove"
             "footer";
     }
 
-    .preview, .exif-data, .export {
+    .preview, .exif-data, .export, .remove-exif {
         padding-left: 40px;
         padding-right: 40px;
     }
@@ -439,19 +490,10 @@ footer {
         gap: 20px;
     }
 
-    header, .preview, .exif-data, .export, .upload-section {
+    header, .preview, .exif-data, .export, .upload-section, .remove-exif {
         padding-left: 20px;
         padding-right: 20px;
         padding-top: 20px;
-    }
-
-    .export-controls {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .export-controls select, .export-controls button {
-        width: 100%;
     }
 
     .extract-button, .export-controls button {
@@ -471,5 +513,24 @@ footer {
         table-layout: fixed;
         overflow-x: auto;
         white-space: normal; 
+    }
+
+    .export-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .export-controls select, .export-controls button {
+        width: 100%;
+    }
+
+    .remove-text {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .remove-text button {
+        width: 100%;
+        font-size: 16px;
     }
 }

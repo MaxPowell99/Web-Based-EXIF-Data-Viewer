@@ -1,17 +1,20 @@
-const imageInput = document.getElementById("imageInput");
-const extractButton = document.getElementById("extractButton");
-const imagePreview = document.getElementById("imagePreview");
-const exifOutput = document.getElementById("exifOutput");
-const uploadText = document.getElementById("uploadText");
-const fileInfo = document.getElementById("fileInfo");
-const uploadStatus = document.getElementById("uploadStatus");
-const previewSection = document.querySelector(".preview");
-const exifSection = document.querySelector(".exif-data");
 const uploadBox = document.querySelector(".upload-box");
+const uploadText = document.getElementById("uploadText");
+const uploadStatus = document.getElementById("uploadStatus");
+const extractButton = document.getElementById("extractButton");
+const fileInfo = document.getElementById("fileInfo");
+const imageInput = document.getElementById("imageInput");
+const previewSection = document.querySelector(".preview");
+const imagePreview = document.getElementById("imagePreview");
+const exifSection = document.querySelector(".exif-data");
+const exifOutput = document.getElementById("exifOutput");
+const exportSection = document.querySelector(".export");
 const exportButton = document.getElementById("exportButton");
 const exportFormat = document.getElementById("exportFormat");
-const exportSection = document.querySelector(".export");
 let exifDataStore = {};
+const removeSection = document.querySelector(".remove-exif");
+const removeBtn = document.getElementById("removeExifBtn");
+let uploadedImage = null;
 
 function showError(message) {
     uploadText.textContent = "Invalid File Type - Click again to try another file.";
@@ -73,6 +76,17 @@ imageInput.addEventListener("change", function () {
     
     uploadStatus.classList.add("success");
     uploadStatus.classList.remove("error");
+
+    /* Store image for EXIF Remove */
+    const reader = new FileReader();
+    reader.onload = function (e) {
+        uploadedImage = new Image();
+        uploadedImage.src = e.target.result;
+
+        /* Enable remove button */
+        removeBtn.disabled = false;
+    };
+    reader.readAsDataURL(file);
 });
 
 /* User clicks extract button */
@@ -89,6 +103,7 @@ extractButton.addEventListener("click", function () {
     previewSection.style.display = "block";
     exifSection.style.display = "block";
     exportSection.style.display = "block";
+    removeSection.style.display = "block";
 
     previewSection.scrollIntoView({ behavior: "smooth" });
 
@@ -200,6 +215,8 @@ extractButton.addEventListener("click", function () {
 
     reader.readAsDataURL(file);
 });
+
+
 
 /* Export Function */
 exportButton.addEventListener("click", function () {
@@ -317,38 +334,7 @@ exportButton.addEventListener("click", function () {
     }
 });
 
-/* Download Function */
-function downloadFile(content, type, filename) {
-    const blob = new Blob([content], { type });
-    const url = URL.createObjectURL(blob);
-
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = filename;
-    a.click();
-
-    URL.revokeObjectURL(url);
-}
-
-let uploadedImage = null;
-
-const fileInput = document.getElementById("imageInput");
-const removeBtn = document.getElementById("removeExifBtn");
-
-fileInput.addEventListener("change", function() {
-    const file = this.files[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = function (e) {
-        uploadedImage = new Image();
-        uploadedImage.src = e.target.result;
-
-        removeBtn.disabled = false;
-    };
-    reader.readAsDataURL(file);
-});
-
+/* EXIF Data Removal Function */
 removeBtn.addEventListener("click", function () {
     if (!uploadedImage) {
         alert("You must upload an image!");
@@ -370,3 +356,16 @@ removeBtn.addEventListener("click", function () {
         link.click();
     }, "image/jpeg", 0.95);
 });
+
+/* Download Function */
+function downloadFile(content, type, filename) {
+    const blob = new Blob([content], { type });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    a.click();
+
+    URL.revokeObjectURL(url);
+}
