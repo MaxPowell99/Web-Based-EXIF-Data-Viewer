@@ -1,17 +1,20 @@
-const imageInput = document.getElementById("imageInput");
-const extractButton = document.getElementById("extractButton");
-const imagePreview = document.getElementById("imagePreview");
-const exifOutput = document.getElementById("exifOutput");
-const uploadText = document.getElementById("uploadText");
-const fileInfo = document.getElementById("fileInfo");
-const uploadStatus = document.getElementById("uploadStatus");
-const previewSection = document.querySelector(".preview");
-const exifSection = document.querySelector(".exif-data");
 const uploadBox = document.querySelector(".upload-box");
+const uploadText = document.getElementById("uploadText");
+const uploadStatus = document.getElementById("uploadStatus");
+const extractButton = document.getElementById("extractButton");
+const fileInfo = document.getElementById("fileInfo");
+const imageInput = document.getElementById("imageInput");
+const previewSection = document.querySelector(".preview");
+const imagePreview = document.getElementById("imagePreview");
+const exifSection = document.querySelector(".exif-data");
+const exifOutput = document.getElementById("exifOutput");
+const exportSection = document.querySelector(".export");
 const exportButton = document.getElementById("exportButton");
 const exportFormat = document.getElementById("exportFormat");
-const exportSection = document.querySelector(".export");
 let exifDataStore = {};
+const removeSection = document.querySelector(".remove-exif");
+const removeBtn = document.getElementById("removeExifBtn");
+let uploadedImage = null;
 
 function showError(message) {
     uploadText.textContent = "Invalid File Type - Click again to try another file.";
@@ -73,6 +76,17 @@ imageInput.addEventListener("change", function () {
     
     uploadStatus.classList.add("success");
     uploadStatus.classList.remove("error");
+
+    /* Store image for EXIF Remove */
+    const reader = new FileReader();
+    reader.onload = function (e) {
+        uploadedImage = new Image();
+        uploadedImage.src = e.target.result;
+
+        /* Enable remove button */
+        removeBtn.disabled = false;
+    };
+    reader.readAsDataURL(file);
 });
 
 /* User clicks extract button */
@@ -89,6 +103,7 @@ extractButton.addEventListener("click", function () {
     previewSection.style.display = "block";
     exifSection.style.display = "block";
     exportSection.style.display = "block";
+    removeSection.style.display = "block";
 
     previewSection.scrollIntoView({ behavior: "smooth" });
 
@@ -98,11 +113,11 @@ extractButton.addEventListener("click", function () {
 
         /* Clear previous preview */
         imagePreview.innerHTML = "";
+        /* Clear previous exif data */
         exifOutput.innerHTML = "";
 
         const img = document.createElement("img");
         img.src = event.target.result;
-
         imagePreview.appendChild(img);
 
         /* Wait for image to load */
@@ -201,6 +216,8 @@ extractButton.addEventListener("click", function () {
     reader.readAsDataURL(file);
 });
 
+
+
 /* Export Function */
 exportButton.addEventListener("click", function () {
 
@@ -224,97 +241,120 @@ exportButton.addEventListener("click", function () {
     if (format === "json") {
         const content = JSON.stringify(exifDataStore, null, 2);
         downloadFile(content, "application/json", fileName + ".json");
-    36, 36, 36}
-
-/* CSV */
-else if (format === "csv") {
-    let rows = [];
-    for (let section in exifDataStore) {
-        rows.push(`"${section.toUpperCase()}"`);
-        for (let key in exifDataStore[section]) {
-            rows.push(`"${key}","${exifDataStore[section][key]}"`);
-        }
-        rows.push("");
     }
-    const content = rows.join("\n");
-    downloadFile(content, "text/csv", fileName + ".csv");
-}
 
-/* XML */
-else if (format === "xml") {
-    let content = `<exifData>\n`;
-    for (let section in exifDataStore) {
-        content += `  <${section}>\n`;
-        for (let key in exifDataStore[section]) {
-            content += `    <${key.replace(/\s/g, "_")}>${exifDataStore[section][key]}</${key.replace(/\s/g, "_")}>\n`;
+    /* CSV */
+    else if (format === "csv") {
+        let rows = [];
+        for (let section in exifDataStore) {
+            rows.push(`"${section.toUpperCase()}"`);
+            for (let key in exifDataStore[section]) {
+                rows.push(`"${key}","${exifDataStore[section][key]}"`);
+            }
+            rows.push("");
         }
-        content += `  </${section}>\n`;
+        const content = rows.join("\n");
+        downloadFile(content, "text/csv", fileName + ".csv");
     }
-    content += `</exifData>`;
-    downloadFile(content, "application/xml", fileName + ".xml");
-}
 
-/* PHP */
-else if (format === "php") {
-    const content = "<?php\n$exifData = " + JSON.stringify(exifDataStore, null, 2) + ";\n?>";
-    downloadFile(content, "application/x-httpd-php", fileName + ".php");
-}
+    /* XML */
+    else if (format === "xml") {
+        let content = `<exifData>\n`;
+        for (let section in exifDataStore) {
+            content += `  <${section}>\n`;
+            for (let key in exifDataStore[section]) {
+                content += `    <${key.replace(/\s/g, "_")}>${exifDataStore[section][key]}</${key.replace(/\s/g, "_")}>\n`;
+            }
+            content += `  </${section}>\n`;
+        }
+        content += `</exifData>`;
+        downloadFile(content, "application/xml", fileName + ".xml");
+    }
 
-/* PDF */
-else if (format === "pdf") {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-    let y = 10;
+    /* PHP */
+    else if (format === "php") {
+        const content = "<?php\n$exifData = " + JSON.stringify(exifDataStore, null, 2) + ";\n?>";
+        downloadFile(content, "application/x-httpd-php", fileName + ".php");
+    }
 
-    // Title uses the base file name
-    doc.setFontSize(18);
-    doc.text(`${baseFileName} - EXIF Data`, 105, y, { align: "center" });
-    y += 10;
+    /* PDF */
+    else if (format === "pdf") {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        let y = 10;
 
-    doc.setFontSize(12);
+        // Title uses the base file name
+        doc.setFontSize(18);
+        doc.text(`${baseFileName} - EXIF Data`, 105, y, { align: "center" });
+        y += 10;
 
-    // Basic File Information Table
-    const basicRows = Object.entries(exifDataStore.basic).map(([key, value]) => [key, value]);
-    doc.autoTable({
-        startY: y,
-        head: [["Property", "Value"]],
-        body: basicRows,
-        theme: "grid",
-        styles: { fontSize: 10 },
-        headStyles: { fillColor: [36, 36, 36] },
-    });
-    y = doc.lastAutoTable.finalY + 10;
+        doc.setFontSize(12);
 
-    // Image Properties Table
-    const imageRows = Object.entries(exifDataStore.image).map(([key, value]) => [key, value]);
-    doc.autoTable({
-        startY: y,
-        head: [["Property", "Value"]],
-        body: imageRows,
-        theme: "grid",
-        styles: { fontSize: 10 },
-        headStyles: { fillColor: [36, 36, 36] },
-    });
-    y = doc.lastAutoTable.finalY + 10;
+        // Basic File Information Table
+        const basicRows = Object.entries(exifDataStore.basic).map(([key, value]) => [key, value]);
+        doc.autoTable({
+            startY: y,
+            head: [["Property", "Value"]],
+            body: basicRows,
+            theme: "grid",
+            styles: { fontSize: 10 },
+            headStyles: { fillColor: [36, 36, 36] },
+        });
+        y = doc.lastAutoTable.finalY + 10;
 
-    // EXIF Metadata Table
-    const exifRows = Object.entries(exifDataStore.exif).map(([key, value]) => [key, value]);
-    doc.autoTable({
-        startY: y,
-        head: [["Property", "Value"]],
-        body: exifRows,
-        theme: "grid",
-        styles: { fontSize: 10 },
-        headStyles: { fillColor: [36, 36, 36] },
-        didDrawPage: function () {
-            const page = doc.getNumberOfPages();
-            doc.setFontSize(8);
-            doc.text(`Page ${page}`, 105, doc.internal.pageSize.height - 10, { align: "center" });
-        },
-    });
+        // Image Properties Table
+        const imageRows = Object.entries(exifDataStore.image).map(([key, value]) => [key, value]);
+        doc.autoTable({
+            startY: y,
+            head: [["Property", "Value"]],
+            body: imageRows,
+            theme: "grid",
+            styles: { fontSize: 10 },
+            headStyles: { fillColor: [36, 36, 36] },
+        });
+        y = doc.lastAutoTable.finalY + 10;
 
-    doc.save(fileName + ".pdf");
-}
+        // EXIF Metadata Table
+        const exifRows = Object.entries(exifDataStore.exif).map(([key, value]) => [key, value]);
+        doc.autoTable({
+            startY: y,
+            head: [["Property", "Value"]],
+            body: exifRows,
+            theme: "grid",
+            styles: { fontSize: 10 },
+            headStyles: { fillColor: [36, 36, 36] },
+            didDrawPage: function () {
+                const page = doc.getNumberOfPages();
+                doc.setFontSize(8);
+                doc.text(`Page ${page}`, 105, doc.internal.pageSize.height - 10, { align: "center" });
+            },
+        });
+
+        doc.save(fileName + ".pdf");
+    }
+});
+
+/* EXIF Data Removal Function */
+removeBtn.addEventListener("click", function () {
+    if (!uploadedImage) {
+        alert("You must upload an image!");
+        return;
+    }
+
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+
+    canvas.width = uploadedImage.width;
+    canvas.height = uploadedImage.height;
+
+    ctx.drawImage(uploadedImage, 0, 0);
+
+    canvas.toBlob(function (blob) {
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = "clean-image.jpg";
+        link.click();
+    }, "image/jpeg", 0.95);
 });
 
 /* Download Function */
