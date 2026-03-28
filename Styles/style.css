@@ -18,9 +18,7 @@ body {
         "header header"
         "nav nav"
         "upload upload"
-        "preview exif"
-        "export exif"
-        "remove exif"
+        "left right"
         "footer footer";
 
     gap: 30px;
@@ -232,6 +230,17 @@ img.upload-icon {
 .extract-button:hover {
     background-color: #005fa3;
     transform: translateY(-2px);
+}
+
+.left-column {
+    grid-area: left;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.right-column {
+    grid-area: right;
 }
 
 .preview {
