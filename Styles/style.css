@@ -263,6 +263,7 @@ img.upload-icon {
     width: auto;
     min-width: 350px;
     height: auto;
+    max-height: 490px;
     border: 1px solid #e0e4ea;
 }
 
@@ -466,22 +467,25 @@ footer {
     font-weight: 600;
 }
 
-/* For screens smaller than 1250px */
-@media (max-width: 1250px) {
+/* For screens smaller than 1300px */
+@media (max-width: 1300px) {
 
     .grid-container {
         grid-template-columns: 1fr;
         grid-template-areas:
-            "header"
-            "nav"
-            "upload"
-            "left"
-            "right"
-            "footer";
+        "header"
+        "nav"
+        "upload"
+        "preview"
+        "exif"
+        "export"
+        "remove"
+        "footer";
     }
 
     .left-column, .right-column {
         width: 100%;
+        display: contents;
     }
 
     .preview, .exif-data, .export, .remove-exif {
