@@ -468,22 +468,41 @@ footer {
 
 /* For screens smaller than 125px */
 @media (max-width: 1250px) {
+
     .grid-container {
         grid-template-columns: 1fr;
         grid-template-areas:
             "header"
             "nav"
             "upload"
-            "preview"
-            "exif"
-            "export"
-            "remove"
+            "left"
+            "right"
             "footer";
     }
 
+    /* Stack left + right properly */
+    .left-column,
+    .right-column {
+        width: 100%;
+    }
+
+    /* Reduce padding smoothly (prevents header jump) */
+    header, nav, .upload-section,
     .preview, .exif-data, .export, .remove-exif {
         padding-left: 40px;
         padding-right: 40px;
+    }
+
+    /* Fix EXIF spacing when stacked */
+    .exif-data {
+        padding-left: 40px;
+        padding-right: 40px;
+    }
+
+    /* Prevent image forcing layout break */
+    #imagePreview img {
+        min-width: 0;
+        max-width: 100%;
     }
 }
 
@@ -491,48 +510,44 @@ footer {
 @media (max-width: 650px) {
 
     body {
-        padding: 20px 10px;
+        padding: 15px 8px;
     }
 
     .grid-container {
         max-width: 100%;
-        gap: 20px;
+        gap: 15px;
     }
 
-    header, .preview, .exif-data, .export, .upload-section, .remove-exif {
+    /* Reduce padding again (consistent scaling) */
+    header, nav, .upload-section,
+    .preview, .exif-data, .export, .remove-exif {
         padding-left: 20px;
         padding-right: 20px;
-        padding-top: 20px;
     }
 
-    .extract-button, .export-controls button {
+    /* KEEP NAV HORIZONTAL */
+    nav ul {
+        flex-direction: row;
+    }
+
+    nav li {
+        width: 50%;
+    }
+
+    /* Buttons full width */
+    .extract-button,
+    .export-controls button {
         width: 100%;
         padding: 14px;
-        font-size: 16px;
     }
 
-    #imagePreview img {
-        width: 100%;
-        height: auto;
-    }
-
-   .exif-table {
-        display: table;
-        width: 100%;
-        table-layout: fixed;
-        overflow-x: auto;
-        white-space: normal; 
-    }
-
+    /* Export controls stack nicely */
     .export-controls {
         flex-direction: column;
         align-items: stretch;
     }
 
-    .export-controls select, .export-controls button {
-        width: 100%;
-    }
-
+    /* Remove EXIF section stack */
     .remove-text {
         flex-direction: column;
         align-items: stretch;
@@ -540,6 +555,14 @@ footer {
 
     .remove-text button {
         width: 100%;
-        font-size: 16px;
+    }
+
+    /* Fix tables overflowing */
+   .exif-table {
+        display: table;
+        width: 100%;
+        table-layout: fixed;
+        overflow-x: auto;
+        white-space: normal; 
     }
 }
