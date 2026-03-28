@@ -466,7 +466,7 @@ footer {
     font-weight: 600;
 }
 
-/* For screens smaller than 125px */
+/* For screens smaller than 1250px */
 @media (max-width: 1250px) {
 
     .grid-container {
@@ -480,34 +480,23 @@ footer {
             "footer";
     }
 
-    /* Stack left + right properly */
-    .left-column,
-    .right-column {
+    .left-column, .right-column {
         width: 100%;
     }
 
-    /* Reduce padding smoothly (prevents header jump) */
-    header, nav, .upload-section,
     .preview, .exif-data, .export, .remove-exif {
         padding-left: 40px;
         padding-right: 40px;
     }
 
-    /* Fix EXIF spacing when stacked */
-    .exif-data {
-        padding-left: 40px;
-        padding-right: 40px;
-    }
-
-    /* Prevent image forcing layout break */
     #imagePreview img {
         min-width: 0;
         max-width: 100%;
     }
 }
 
-/* For screens smaller than 650px */
-@media (max-width: 650px) {
+/* For screens smaller than 800px */
+@media (max-width: 800px) {
 
     body {
         padding: 15px 8px;
@@ -518,14 +507,12 @@ footer {
         gap: 15px;
     }
 
-    /* Reduce padding again (consistent scaling) */
     header, nav, .upload-section,
     .preview, .exif-data, .export, .remove-exif {
         padding-left: 20px;
         padding-right: 20px;
     }
 
-    /* KEEP NAV HORIZONTAL */
     nav ul {
         flex-direction: row;
     }
@@ -534,20 +521,17 @@ footer {
         width: 50%;
     }
 
-    /* Buttons full width */
     .extract-button,
     .export-controls button {
         width: 100%;
         padding: 14px;
     }
 
-    /* Export controls stack nicely */
     .export-controls {
         flex-direction: column;
         align-items: stretch;
     }
 
-    /* Remove EXIF section stack */
     .remove-text {
         flex-direction: column;
         align-items: stretch;
@@ -557,7 +541,6 @@ footer {
         width: 100%;
     }
 
-    /* Fix tables overflowing */
    .exif-table {
         display: table;
         width: 100%;
