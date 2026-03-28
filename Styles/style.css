@@ -365,6 +365,7 @@ img.upload-icon {
 
 .export-controls button {
     padding: 10px 20px;
+    width: 120px;
     border: none;
     border-radius: 6px;
     background-color: #0077cc;
@@ -404,6 +405,7 @@ img.upload-icon {
 
 .remove-exif button {
     padding: 10px 20px;
+    width: 120px;
     border: none;
     border-radius: 6px;
     background-color: #0077cc;
