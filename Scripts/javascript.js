@@ -352,9 +352,15 @@ removeBtn.addEventListener("click", function () {
     canvas.toBlob(function (blob) {
         const link = document.createElement("a");
         link.href = URL.createObjectURL(blob);
-        link.download = "clean-image.jpg";
+
+        const originalName = imageInput.files[0].name;
+        const extension = originalName.split('.').pop();
+        const baseName = originalName.replace(/\.[^/.]+$/, "");
+
+        link.download = "clean-" + baseName + "." + extension;
+
         link.click();
-    }, "image/jpeg", 0.95);
+    },  "image/jpeg", 0.95);
 });
 
 /* Download Function */

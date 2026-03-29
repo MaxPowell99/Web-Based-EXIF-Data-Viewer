@@ -18,9 +18,7 @@ body {
         "header header"
         "nav nav"
         "upload upload"
-        "preview exif"
-        "export exif"
-        "remove exif"
+        "left right"
         "footer footer";
 
     gap: 30px;
@@ -234,6 +232,17 @@ img.upload-icon {
     transform: translateY(-2px);
 }
 
+.left-column {
+    grid-area: left;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.right-column {
+    grid-area: right;
+}
+
 .preview {
     grid-area: preview;
     padding-right: 0;
@@ -254,6 +263,7 @@ img.upload-icon {
     width: auto;
     min-width: 350px;
     height: auto;
+    max-height: 490px;
     border: 1px solid #e0e4ea;
 }
 
@@ -355,6 +365,7 @@ img.upload-icon {
 
 .export-controls button {
     padding: 10px 20px;
+    width: 120px;
     border: none;
     border-radius: 6px;
     background-color: #0077cc;
@@ -394,6 +405,7 @@ img.upload-icon {
 
 .remove-exif button {
     padding: 10px 20px;
+    width: 120px;
     border: none;
     border-radius: 6px;
     background-color: #0077cc;
@@ -457,71 +469,73 @@ footer {
     font-weight: 600;
 }
 
-/* For screens smaller than 125px */
-@media (max-width: 1250px) {
+/* For screens smaller than 1300px */
+@media (max-width: 1300px) {
+
     .grid-container {
         grid-template-columns: 1fr;
         grid-template-areas:
-            "header"
-            "nav"
-            "upload"
-            "preview"
-            "exif"
-            "export"
-            "remove"
-            "footer";
+        "header"
+        "nav"
+        "upload"
+        "preview"
+        "exif"
+        "export"
+        "remove"
+        "footer";
+    }
+
+    .left-column, .right-column {
+        width: 100%;
+        display: contents;
     }
 
     .preview, .exif-data, .export, .remove-exif {
         padding-left: 40px;
         padding-right: 40px;
     }
+
+    #imagePreview img {
+        min-width: 0;
+        max-width: 100%;
+    }
 }
 
-/* For screens smaller than 650px */
-@media (max-width: 650px) {
+/* For screens smaller than 800px */
+@media (max-width: 800px) {
 
     body {
-        padding: 20px 10px;
+        padding: 15px 8px;
     }
 
     .grid-container {
         max-width: 100%;
-        gap: 20px;
+        gap: 15px;
     }
 
-    header, .preview, .exif-data, .export, .upload-section, .remove-exif {
+    header, nav, .upload-section,
+    .preview, .exif-data, .export, .remove-exif {
         padding-left: 20px;
         padding-right: 20px;
-        padding-top: 20px;
     }
 
-    .extract-button, .export-controls button {
+    nav ul {
+        flex-direction: row;
+    }
+
+    nav li {
+        width: 50%;
+    }
+
+    .extract-button,
+    .export-controls button {
         width: 100%;
         padding: 14px;
-        font-size: 16px;
-    }
-
-    #imagePreview img {
-        width: 100%;
-        height: auto;
-    }
-
-   .exif-table {
-        display: table;
-        width: 100%;
-        table-layout: fixed;
-        overflow-x: auto;
-        white-space: normal; 
     }
 
     .export-controls {
         flex-direction: column;
         align-items: stretch;
-    }
-
-    .export-controls select, .export-controls button {
-        width: 100%;
     }
 
     .remove-text {
@@ -531,6 +545,13 @@ footer {
 
     .remove-text button {
         width: 100%;
-        font-size: 16px;
+    }
+
+   .exif-table {
+        display: table;
+        width: 100%;
+        table-layout: fixed;
+        overflow-x: auto;
+        white-space: normal; 
     }
 }

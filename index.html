@@ -46,47 +46,51 @@
             </div>
         </section>
 
-        <section class="preview">
-            <h2>Image Preview</h2>
-            <div class="preview-section" id="imagePreview"></div>
-        </section>
+        <div class="left-column">
+            <section class="preview">
+                <h2>Image Preview</h2>
+                <div class="preview-section" id="imagePreview"></div>
+            </section>
 
-        <section class="exif-data">
-            <h2>EXIF Data</h2>
-            <div id="exifOutput"></div>
-        </section>
-
-        <section class="export">
-            <h2>Export EXIF Data</h2>
-            <div class="export-container">
-                <h3>Choose a Format</h3>
-                <div class="export-controls">
-                    <select id="exportFormat">
-                        <option value="">Select format</option>
-                        <option value="pdf">.pdf</option>
-                        <option value="csv">.csv</option>
-                        <option value="json">.json</option>
-                        <option value="php">.php</option>
-                        <option value="xml">.xml</option>
-                    </select>
-                    <button id="exportButton">
-                        <i class="fa-solid fa-download"></i> Export
-                    </button>
+            <section class="export">
+                <h2>Export EXIF Data</h2>
+                <div class="export-container">
+                    <h3>Choose a Format</h3>
+                    <div class="export-controls">
+                        <select id="exportFormat">
+                            <option value="">Select format</option>
+                            <option value="pdf">.pdf</option>
+                            <option value="csv">.csv</option>
+                            <option value="json">.json</option>
+                            <option value="php">.php</option>
+                            <option value="xml">.xml</option>
+                        </select>
+                        <button id="exportButton">
+                            <i class="fa-solid fa-download"></i> Export
+                        </button>
+                    </div>
                 </div>
-            </div>
-        </section>
+            </section>
 
-        <section class="remove-exif">
-            <h2>Download Clean Image</h2>
-            <div class="remove-exif-container">
-                <div class="remove-text">
-                    <h3>Remove EXIF Data & Download Clean Image</h3>
-                    <button id="removeExifBtn" disabled>
-                        <i class="fa-solid fa-download"></i> Download
-                    </button>
+            <section class="remove-exif">
+                <h2>Download Clean Image</h2>
+                <div class="remove-exif-container">
+                    <div class="remove-text">
+                        <h3>Remove EXIF Data & Download Clean Image</h3>
+                        <button id="removeExifBtn" disabled>
+                            <i class="fa-solid fa-download"></i> Download
+                        </button>
+                    </div>
                 </div>
-            </div>
-        </section>
+            </section>
+        </div>
+
+        <div class="right-column">
+            <section class="exif-data">
+                <h2>EXIF Data</h2>
+                <div id="exifOutput"></div>
+            </section>
+        </div>
 
         <footer>
             <p><u>"The Grey Hats" - EXIF Data Viewer Project</u></p>
