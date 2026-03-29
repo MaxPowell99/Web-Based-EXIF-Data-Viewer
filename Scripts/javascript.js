@@ -39,30 +39,34 @@ imageInput.addEventListener("change", function () {
 
     /* File Type Validation */
     const isJPG = fileName.endsWith(".jpg") || fileName.endsWith(".jpeg");
-    const isTIFF = fileName.endsWith(".tif") || fileName.endsWith(".tiff");
 
     if (fileName.endsWith(".png")) {
-        showError("PNG files are not supported - Only .jpg, .jpeg, .tif, .tiff files can be uploaded.");
+        showError("PNG files are not supported - Only .jpg / .jpeg files can be uploaded.");
         return;
     }
 
      if (fileName.endsWith(".heic")) {
-        showError("HEIC files are not supported - Only .jpg, .jpeg, .tif, .tiff files can be uploaded.");
+        showError("HEIC files are not supported - Only .jpg / .jpeg files can be uploaded.");
         return;
     }
 
     if (fileName.endsWith(".gif")) {
-        showError("GIF files are not supported - Only .jpg, .jpeg, .tif, .tiff files can be uploaded.");
+        showError("GIF files are not supported - Only .jpg / .jpeg files can be uploaded.");
         return;
     }
 
     if (fileName.endsWith(".webp")) {
-        showError("WEBP files are not supported - Only .jpg, .jpeg, .tif, .tiff files can be uploaded.");
+        showError("WEBP files are not supported - Only .jpg / .jpeg files can be uploaded.");
         return;
     }
 
-    if (!isJPG && !isTIFF) {
-        showError("Unsupported file type - Only .jpg, .jpeg, .tif, .tiff files can be uploaded.");
+    if (fileName.endsWith(".tif")) {
+        showError("TIF files are not supported - Only .jpg / .jpeg files can be uploaded.");
+        return;
+    }
+
+    if (!isJPG) {
+        showError("Unsupported file type - Only .jpg / .jpeg files can be uploaded.");
         return;
     }
 
@@ -234,7 +238,7 @@ exportButton.addEventListener("click", function () {
     }
 
     const originalFileName = imageInput.files[0].name;
-    const baseFileName = originalFileName.replace(/\.[^/.]+$/, ""); /* Removes .jpg, .jpeg, .tif, etc. from file name */
+    const baseFileName = originalFileName.replace(/\.[^/.]+$/, ""); /* Removes .jpg, .jpeg, etc. from file name */
     const fileName = `${baseFileName}-exif-data`; /* Sets file name */
 
     /* JSON */
