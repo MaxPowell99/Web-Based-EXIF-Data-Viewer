@@ -139,6 +139,11 @@ nav a.active {
     margin-bottom: 15px;
 }
 
+.upload-box.dragover {
+    border-color: #0077cc;
+    background: #eaf6ff;
+}
+
 .upload-label {
     cursor: pointer;
     display: block;

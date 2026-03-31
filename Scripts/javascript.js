@@ -17,13 +17,39 @@ const removeSection = document.querySelector(".remove-exif");
 const removeBtn = document.getElementById("removeExifBtn");
 let uploadedImage = null;
 
+/* Drag and drop upload */
+uploadBox.addEventListener("dragover", function(e) {
+    e.preventDefault();
+    uploadBox.classList.add("dragover");
+});
+
+uploadBox.addEventListener("dragleave", function() {
+    uploadBox.classList.remove("dragover");
+});
+
+uploadBox.addEventListener("drop", function(e) {
+    e.preventDefault();
+    uploadBox.classList.remove("dragover");
+
+    const file = e.dataTransfer.files[0];
+    if (!file) return;
+
+    /* Put file into input element */
+    const dataTransfer = new DataTransfer();
+    dataTransfer.items.add(file);
+    imageInput.files = dataTransfer.files;
+
+    /* Trigger the upload logic */
+    imageInput.dispatchEvent(new Event("change"));
+});
+
 function showError(message) {
-    uploadText.style.display = "none"; /* hide default text */
+    uploadText.style.display = "none"; /* Hide default text */
 
     uploadStatus.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> Upload Failed';
     uploadStatus.className = "error";
 
-    fileName.textContent = ""; /* no filename on error */
+    fileName.textContent = ""; /* No filename on error */
 
     uploadExtra.textContent = "Invalid File - Click here again to try another file.";
 
@@ -329,14 +355,14 @@ exportButton.addEventListener("click", function () {
         const doc = new jsPDF();
         let y = 10;
 
-        // Title uses the base file name
+        /* Title uses the base file name */
         doc.setFontSize(18);
         doc.text(`${baseFileName} - EXIF Data`, 105, y, { align: "center" });
         y += 10;
 
         doc.setFontSize(12);
 
-        // Basic File Information Table
+        /* Basic File Information Table */
         const basicRows = Object.entries(exifDataStore.basic).map(([key, value]) => [key, value]);
         doc.autoTable({
             startY: y,
@@ -353,7 +379,7 @@ exportButton.addEventListener("click", function () {
         });
         y = doc.lastAutoTable.finalY + 10;
 
-        // Image Properties Table
+        /* Image Properties Table */
         const imageRows = Object.entries(exifDataStore.image).map(([key, value]) => [key, value]);
         doc.autoTable({
             startY: y,
@@ -370,7 +396,7 @@ exportButton.addEventListener("click", function () {
         });
         y = doc.lastAutoTable.finalY + 10;
 
-        // EXIF Metadata Table
+        /* EXIF Metadata Table */
         const sections = ["camera", "capture", "gps"];
         sections.forEach(section => {
             const rows = Object.entries(exifDataStore[section]).map(([key, value]) => [key, value]);
@@ -390,7 +416,7 @@ exportButton.addEventListener("click", function () {
             y = doc.lastAutoTable.finalY + 10;
         });
 
-        // Page numbers
+        /* Page numbers */
         const pageCount = doc.getNumberOfPages();
         for (let i = 1; i <= pageCount; i++) {
             doc.setPage(i);
