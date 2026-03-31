@@ -527,8 +527,12 @@ footer {
         gap: 15px;
     }
 
-    header, nav, .upload-section,
-    .preview, .exif-data, .export, .remove-exif {
+    header {
+        justify-content: center;
+        margin-bottom: 10px;
+    }
+
+    header, nav, .upload-section, .preview, .exif-data, .export, .remove-exif {
         padding-left: 20px;
         padding-right: 20px;
     }
@@ -541,10 +545,21 @@ footer {
         width: 50%;
     }
 
-    .extract-button,
-    .export-controls button {
+    .upload-section {
+        margin-top: 20px;
+    }
+
+    .extract-button, .export-controls button {
         width: 100%;
         padding: 14px;
+    }
+
+    .preview h2, .exif-data h2 {
+        margin-top: 20px;
+    }
+
+    .remove {
+        margin-top: 10px;
     }
 
     .export-controls {
