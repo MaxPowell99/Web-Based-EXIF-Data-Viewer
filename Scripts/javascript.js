@@ -25,7 +25,7 @@ function showError(message) {
 
     fileName.textContent = ""; // no filename on error
 
-    uploadExtra.textContent = "Invalid File Type - Click again to try another file.";
+    uploadExtra.textContent = "Invalid File Type - Click here again to try another file.";
 
     fileInfo.textContent = message;
 
@@ -88,7 +88,7 @@ imageInput.addEventListener("change", function () {
     uploadStatus.classList.add("success");
     uploadStatus.classList.remove("error");
 
-    uploadExtra.textContent = "Click again to upload another file.";
+    uploadExtra.textContent = "Click here again to upload another file.";
 
     /* Store image for EXIF Remove */
     const reader = new FileReader();
