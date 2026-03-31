@@ -18,14 +18,14 @@ const removeBtn = document.getElementById("removeExifBtn");
 let uploadedImage = null;
 
 function showError(message) {
-    uploadText.style.display = "none"; // hide default text
+    uploadText.style.display = "none"; /* hide default text */
 
     uploadStatus.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> Upload Failed';
     uploadStatus.className = "error";
 
-    fileName.textContent = ""; // no filename on error
+    fileName.textContent = ""; /* no filename on error */
 
-    uploadExtra.textContent = "Invalid File Type - Click here again to try another file.";
+    uploadExtra.textContent = "Invalid File - Click here again to try another file.";
 
     fileInfo.textContent = message;
 
@@ -40,7 +40,16 @@ imageInput.addEventListener("change", function () {
     const file = this.files[0];
     if (!file) return;
 
+    const maxFileSize = 20 * 1024 * 1024; /* 20MB file size limit */
+
     const fileName = file.name.toLowerCase();
+
+    /* File Size Validation */
+    if (file.size > maxFileSize) {
+        fileInfo.textContent = file.name;
+        showError("File too large - Maximum file size is 20MB.");
+        return;
+    }
 
     /* File Type Validation */
     const isJPG = fileName.endsWith(".jpg") || fileName.endsWith(".jpeg");
@@ -78,7 +87,7 @@ imageInput.addEventListener("change", function () {
     uploadBox.classList.remove("error");
     uploadBox.classList.add("success");
 
-    uploadText.style.display = "none"; // hide initial text
+    uploadText.style.display = "none"; /* hide initial text */
     uploadStatus.innerHTML = '<i class="fa-solid fa-circle-check"></i> Upload Complete';
     uploadStatus.className = "success";
     fileInfo.textContent = file.name;
