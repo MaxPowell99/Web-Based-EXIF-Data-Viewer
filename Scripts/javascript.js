@@ -3,6 +3,7 @@ const uploadText = document.getElementById("uploadText");
 const uploadStatus = document.getElementById("uploadStatus");
 const extractButton = document.getElementById("extractButton");
 const fileInfo = document.getElementById("fileInfo");
+const fileName = document.getElementById("fileName");
 const imageInput = document.getElementById("imageInput");
 const previewSection = document.querySelector(".preview");
 const imagePreview = document.getElementById("imagePreview");
@@ -17,12 +18,16 @@ const removeBtn = document.getElementById("removeExifBtn");
 let uploadedImage = null;
 
 function showError(message) {
-    uploadText.textContent = "Invalid File Type - Click again to try another file.";
-    fileInfo.textContent = message;
+    uploadText.style.display = "none"; // hide default text
 
     uploadStatus.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> Upload Failed';
-    uploadStatus.classList.add("error");
-    uploadStatus.classList.remove("success");
+    uploadStatus.className = "error";
+
+    fileName.textContent = ""; // no filename on error
+
+    uploadExtra.textContent = "Invalid File Type - Click again to try another file.";
+
+    fileInfo.textContent = message;
 
     uploadBox.classList.add("error");
     uploadBox.classList.remove("success");
@@ -73,13 +78,17 @@ imageInput.addEventListener("change", function () {
     uploadBox.classList.remove("error");
     uploadBox.classList.add("success");
 
-    uploadText.textContent = "Upload Complete";
+    uploadText.style.display = "none"; // hide initial text
+    uploadStatus.innerHTML = '<i class="fa-solid fa-circle-check"></i> Upload Complete';
+    uploadStatus.className = "success";
     fileInfo.textContent = file.name;
 
-    uploadStatus.innerHTML = '<i class="fa-solid fa-circle-check"></i> Ready for EXIF extraction';
+    uploadStatus.innerHTML = '<i class="fa-solid fa-circle-check"></i> Upload Complete - Click the extract button to see EXIF data';
     
     uploadStatus.classList.add("success");
     uploadStatus.classList.remove("error");
+
+    uploadExtra.textContent = "Click again to upload another file.";
 
     /* Store image for EXIF Remove */
     const reader = new FileReader();
