@@ -232,11 +232,20 @@ extractButton.addEventListener("click", function () {
                     `;
                 }
 
-                exifDataSection += `<table class="exif-table">`;
+                exifDataSection += `
+                <table class="exif-table">
+                <tbody>
+                `;
+
                 exifDataSection += createSubsection("Camera Info", cameraInfoData);
                 exifDataSection += createSubsection("Capture Settings", captureSettingsData);
                 exifDataSection += createSubsection("GPS Information", gpsInfoData);
-                exifDataSection += `</table></div>`;
+
+                exifDataSection += `
+                </tbody>
+                </table>
+                </div>
+                `;
 
                 /* FINAL OUTPUT */
                 exifOutput.innerHTML = basicInfo + imageProps + exifDataSection;
