@@ -209,23 +209,23 @@ extractButton.addEventListener("click", function () {
 
                 /* Camera Info */
                 const cameraInfoData = {
-                    "Camera Make": EXIF.getTag(this, "Make") || "N/A",
-                    "Camera Model": EXIF.getTag(this, "Model") || "N/A",
-                    "Lens Model": EXIF.getTag(this, "LensModel") || "N/A",
-                    "Date & Time Taken": EXIF.getTag(this, "DateTimeOriginal") || "N/A",
-                    "Software Modified With": EXIF.getTag(this, "Software") || "N/A",
+                    "Camera Make": EXIF.getTag(this, "Make") || "Not available",
+                    "Camera Model": EXIF.getTag(this, "Model") || "Not available",
+                    "Lens Model": EXIF.getTag(this, "LensModel") || "Not available",
+                    "Date & Time Taken": EXIF.getTag(this, "DateTimeOriginal") || "Not available",
+                    "Software Modified With": EXIF.getTag(this, "Software") || "Not available",
                     "Date Last Modified": new Date(file.lastModified).toLocaleString()
                 };
 
                 /* Capture Settings */
                 const captureSettingsData = {
-                    "ISO": EXIF.getTag(this, "ISOSpeedRatings") || "N/A",
-                    "Exposure Time": EXIF.getTag(this, "ExposureTime") || "N/A",
-                    "Aperture": EXIF.getTag(this, "FNumber") || "N/A",
-                    "Focal Length": EXIF.getTag(this, "FocalLength") || "N/A",
-                    "Flash": EXIF.getTag(this, "Flash") !== undefined ? (EXIF.getTag(this, "Flash") ? "Yes" : "No") : "N/A",
-                    "White Balance": EXIF.getTag(this, "WhiteBalance") !== undefined ? (EXIF.getTag(this, "WhiteBalance") === 1 ? "Auto" : "Manual") : "N/A",
-                    "Metering Mode": EXIF.getTag(this, "MeteringMode") || "N/A"
+                    "ISO": EXIF.getTag(this, "ISOSpeedRatings") || "Not available",
+                    "Exposure Time": EXIF.getTag(this, "ExposureTime") || "Not available",
+                    "Aperture": EXIF.getTag(this, "FNumber") || "Not available",
+                    "Focal Length": EXIF.getTag(this, "FocalLength") || "Not available",
+                    "Flash": EXIF.getTag(this, "Flash") !== undefined ? (EXIF.getTag(this, "Flash") ? "Yes" : "No") : "Not available",
+                    "White Balance": EXIF.getTag(this, "WhiteBalance") !== undefined ? (EXIF.getTag(this, "WhiteBalance") === 1 ? "Auto" : "Manual") : "Not available",
+                    "Metering Mode": EXIF.getTag(this, "MeteringMode") || "Not available"
                 };
 
                 /* GPS Info */
