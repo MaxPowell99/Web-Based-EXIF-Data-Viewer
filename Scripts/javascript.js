@@ -141,7 +141,6 @@ extractButton.addEventListener("click", function () {
                 "File Name": file.name,
                 "File Size": (file.size / 1024).toFixed(2) + " KB",
                 "File Type": file.type,
-                "Date Last Modified": new Date(file.lastModified).toLocaleString()
             };
 
             const basicInfo = `
@@ -171,56 +170,75 @@ extractButton.addEventListener("click", function () {
             `;
 
             /* EXIF DATA */
-            EXIF.getData(img, function () {
+             EXIF.getData(img, function () {
 
-                const make = EXIF.getTag(this, "Make");
-                const model = EXIF.getTag(this, "Model");
-                const dateTaken = EXIF.getTag(this, "DateTimeOriginal");
-
-                const exifData = {
-                    "Camera Make": make || "N/A",
-                    "Camera Model": model || "N/A",
-                    "Date Taken": dateTaken || "N/A",
-                    "Exposure Time": EXIF.getTag(this, "ExposureTime") || "N/A",
-                    "ISO": EXIF.getTag(this, "ISOSpeedRatings") || "N/A",
-                    "Aperture": EXIF.getTag(this, "FNumber") || "N/A",
-                    "Focal Length": EXIF.getTag(this, "FocalLength") || "N/A",
-                    "Software": EXIF.getTag(this, "Software") || "N/A",
+                /* Camera Info */
+                const cameraInfoData = {
+                    "Camera Make": EXIF.getTag(this, "Make") || "N/A",
+                    "Camera Model": EXIF.getTag(this, "Model") || "N/A",
+                    "Lens Model": EXIF.getTag(this, "LensModel") || "N/A",
+                    "Date & Time Taken": EXIF.getTag(this, "DateTimeOriginal") || "N/A",
+                    "Software Modified With": EXIF.getTag(this, "Software") || "N/A",
+                    "Date Last Modified": new Date(file.lastModified).toLocaleString()
                 };
 
-                const lat = EXIF.getTag(this, "GPSLatitude");
-                const lon = EXIF.getTag(this, "GPSLongitude");
-                let gps = "Not available";
+                /* Capture Settings */
+                const captureSettingsData = {
+                    "ISO": EXIF.getTag(this, "ISOSpeedRatings") || "N/A",
+                    "Exposure Time": EXIF.getTag(this, "ExposureTime") || "N/A",
+                    "Aperture": EXIF.getTag(this, "FNumber") || "N/A",
+                    "Focal Length": EXIF.getTag(this, "FocalLength") || "N/A",
+                    "Flash": EXIF.getTag(this, "Flash") !== undefined ? (EXIF.getTag(this, "Flash") ? "Yes" : "No") : "N/A",
+                    "White Balance": EXIF.getTag(this, "WhiteBalance") !== undefined ? (EXIF.getTag(this, "WhiteBalance") === 1 ? "Auto" : "Manual") : "N/A",
+                    "Metering Mode": EXIF.getTag(this, "MeteringMode") || "N/A"
+                };
 
+                /* GPS Info */
+                let lat = EXIF.getTag(this, "GPSLatitude");
+                let lon = EXIF.getTag(this, "GPSLongitude");
+                let gpsAltitude = EXIF.getTag(this, "GPSAltitude");
+                let gpsTimestamp = EXIF.getTag(this, "GPSTimeStamp");
+
+                let gpsLocation = "Not available";
                 if (lat && lon) {
-                    gps = lat.join(", ") + " / " + lon.join(", ");
+                    gpsLocation = lat.join(", ") + " / " + lon.join(", ");
                 }
 
-                exifData["GPS Location"] = gps;
+                gpsAltitude = gpsAltitude ? gpsAltitude + " m" : "Not available";
+                gpsTimestamp = gpsTimestamp ? gpsTimestamp.join(":") : "Not available";
 
-                /* Store data for export*/
+                const gpsInfoData = {
+                    "GPS Location": gpsLocation,
+                    "GPS Altitude": gpsAltitude,
+                    "GPS Timestamp": gpsTimestamp
+                };
+
+                /* Store data for export */
                 exifDataStore = {
                     basic: basicInfoData,
                     image: imagePropsData,
-                    exif: exifData
+                    camera: cameraInfoData,
+                    capture: captureSettingsData,
+                    gps: gpsInfoData
                 };
 
+                /* Construct EXIF Table with Subheadings */
                 let exifDataSection = `<div class="exif-section"><h3>EXIF Metadata</h3>`;
 
-                 if (!make && !model && !dateTaken) {
-                    exifDataSection += `<p>No EXIF data found.</p>`;
-                } else {
-                    exifDataSection += `
-                        <table class="exif-table">
-                            <tr><th>Property</th><th>Value</th></tr>
-                            ${Object.entries(exifData).map(([k,v]) => `<tr><td>${k}</td><td>${v}</td></tr>`).join("")}
-                        </table>
+                function createSubsection(title, data) {
+                    return `
+                        <tr style="background:#f0f0f0;"><th colspan="2" style="text-align:center;">${title}</th></tr>
+                        ${Object.entries(data).map(([k,v]) => `<tr><td>${k}</td><td>${v}</td></tr>`).join("")}
                     `;
                 }
 
-                /* FINAL OUTPUT */
-                exifDataSection += `</div>`;
+                exifDataSection += `<table class="exif-table">`;
+                exifDataSection += createSubsection("Camera Info", cameraInfoData);
+                exifDataSection += createSubsection("Capture Settings", captureSettingsData);
+                exifDataSection += createSubsection("GPS Information", gpsInfoData);
+                exifDataSection += `</table></div>`;
 
+                /* FINAL OUTPUT */
                 exifOutput.innerHTML = basicInfo + imageProps + exifDataSection;
             });
         };
@@ -312,6 +330,11 @@ exportButton.addEventListener("click", function () {
             theme: "grid",
             styles: { fontSize: 10 },
             headStyles: { fillColor: [36, 36, 36] },
+
+            columnStyles: {
+                0: { cellWidth: 55 },
+                1: { cellWidth: "auto" }
+            }
         });
         y = doc.lastAutoTable.finalY + 10;
 
@@ -324,24 +347,41 @@ exportButton.addEventListener("click", function () {
             theme: "grid",
             styles: { fontSize: 10 },
             headStyles: { fillColor: [36, 36, 36] },
+
+            columnStyles: {
+                0: { cellWidth: 55 },
+                1: { cellWidth: "auto" }
+            }
         });
         y = doc.lastAutoTable.finalY + 10;
 
         // EXIF Metadata Table
-        const exifRows = Object.entries(exifDataStore.exif).map(([key, value]) => [key, value]);
-        doc.autoTable({
-            startY: y,
-            head: [["Property", "Value"]],
-            body: exifRows,
-            theme: "grid",
-            styles: { fontSize: 10 },
-            headStyles: { fillColor: [36, 36, 36] },
-            didDrawPage: function () {
-                const page = doc.getNumberOfPages();
-                doc.setFontSize(8);
-                doc.text(`Page ${page}`, 105, doc.internal.pageSize.height - 10, { align: "center" });
-            },
+        const sections = ["camera", "capture", "gps"];
+        sections.forEach(section => {
+            const rows = Object.entries(exifDataStore[section]).map(([key, value]) => [key, value]);
+            doc.autoTable({
+                startY: y,
+                head: [["Property", "Value"]],
+                body: rows,
+                theme: "grid",
+                styles: { fontSize: 10 },
+                headStyles: { fillColor: [36, 36, 36] },
+
+                columnStyles: {
+                    0: { cellWidth: 55 },
+                    1: { cellWidth: "auto" }
+                }
+            });
+            y = doc.lastAutoTable.finalY + 10;
         });
+
+        // Page numbers
+        const pageCount = doc.getNumberOfPages();
+        for (let i = 1; i <= pageCount; i++) {
+            doc.setPage(i);
+            doc.setFontSize(8);
+            doc.text(`Page ${i}`, 105, doc.internal.pageSize.height - 10, { align: "center" });
+        }
 
         doc.save(fileName + ".pdf");
     }
