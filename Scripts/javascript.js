@@ -222,7 +222,6 @@ extractButton.addEventListener("click", function () {
                     gps: gpsInfoData
                 };
 
-                /* Construct EXIF Table with Subheadings */
                 let exifDataSection = `<div class="exif-section"><h3>EXIF Metadata</h3>`;
 
                 function createSubsection(title, data) {
@@ -234,18 +233,16 @@ extractButton.addEventListener("click", function () {
 
                 exifDataSection += `
                 <table class="exif-table">
-                <tbody>
+                <colgroup>
+                <col style="width:30%">
+                <col style="width:70%">
+                </colgroup>
                 `;
-
+                
                 exifDataSection += createSubsection("Camera Info", cameraInfoData);
                 exifDataSection += createSubsection("Capture Settings", captureSettingsData);
                 exifDataSection += createSubsection("GPS Information", gpsInfoData);
-
-                exifDataSection += `
-                </tbody>
-                </table>
-                </div>
-                `;
+                exifDataSection += `</table></div>`;
 
                 /* FINAL OUTPUT */
                 exifOutput.innerHTML = basicInfo + imageProps + exifDataSection;
