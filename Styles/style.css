@@ -119,6 +119,7 @@ nav a.active {
 }
 
 .upload-box {
+    height: 230px;
     border: 2px dashed #d0d5dd;
     padding: 50px 20px;
     margin-top: 10px;
@@ -136,6 +137,11 @@ nav a.active {
     font-size: 60px;
     color: #0077cc;
     margin-bottom: 15px;
+}
+
+.upload-box.dragover {
+    border-color: #0077cc;
+    background: #eaf6ff;
 }
 
 .upload-label {
@@ -192,6 +198,7 @@ img.upload-icon {
 
 #fileInfo {
     display: block;
+    font-size: 14px;
     margin-top: 5px;
     font-weight: 600;
     color: #0077cc;
@@ -199,10 +206,23 @@ img.upload-icon {
 
 #uploadStatus {
     display: block;
-    margin-top: 8px;
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 600;
-    color: #28a745;
+    margin-bottom: 8px;
+}
+
+#uploadExtra {
+    font-size: 16px;
+    color: #555;
+    margin-top: 15px;
+}
+
+.upload-status-error { 
+    color:#dc3545; 
+}
+
+.upload-status-success { 
+    color:#28a745;
 }
 
 #uploadStatus i {
@@ -513,8 +533,12 @@ footer {
         gap: 15px;
     }
 
-    header, nav, .upload-section,
-    .preview, .exif-data, .export, .remove-exif {
+    header {
+        justify-content: center;
+        margin-bottom: 10px;
+    }
+
+    header, nav, .upload-section, .preview, .exif-data, .export, .remove-exif {
         padding-left: 20px;
         padding-right: 20px;
     }
@@ -527,10 +551,21 @@ footer {
         width: 50%;
     }
 
-    .extract-button,
-    .export-controls button {
+    .upload-section {
+        margin-top: 20px;
+    }
+
+    .extract-button, .export-controls button {
         width: 100%;
         padding: 14px;
+    }
+
+    .preview h2, .exif-data h2 {
+        margin-top: 20px;
+    }
+
+    .remove {
+        margin-top: 10px;
     }
 
     .export-controls {

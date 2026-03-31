@@ -3,6 +3,7 @@ const uploadText = document.getElementById("uploadText");
 const uploadStatus = document.getElementById("uploadStatus");
 const extractButton = document.getElementById("extractButton");
 const fileInfo = document.getElementById("fileInfo");
+const fileName = document.getElementById("fileName");
 const imageInput = document.getElementById("imageInput");
 const previewSection = document.querySelector(".preview");
 const imagePreview = document.getElementById("imagePreview");
@@ -16,13 +17,43 @@ const removeSection = document.querySelector(".remove-exif");
 const removeBtn = document.getElementById("removeExifBtn");
 let uploadedImage = null;
 
+/* Drag and drop upload */
+uploadBox.addEventListener("dragover", function(e) {
+    e.preventDefault();
+    uploadBox.classList.add("dragover");
+});
+
+uploadBox.addEventListener("dragleave", function() {
+    uploadBox.classList.remove("dragover");
+});
+
+uploadBox.addEventListener("drop", function(e) {
+    e.preventDefault();
+    uploadBox.classList.remove("dragover");
+
+    const file = e.dataTransfer.files[0];
+    if (!file) return;
+
+    /* Put file into input element */
+    const dataTransfer = new DataTransfer();
+    dataTransfer.items.add(file);
+    imageInput.files = dataTransfer.files;
+
+    /* Trigger the upload logic */
+    imageInput.dispatchEvent(new Event("change"));
+});
+
 function showError(message) {
-    uploadText.textContent = "Invalid File Type - Click again to try another file.";
-    fileInfo.textContent = message;
+    uploadText.style.display = "none"; /* Hide default text */
 
     uploadStatus.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> Upload Failed';
-    uploadStatus.classList.add("error");
-    uploadStatus.classList.remove("success");
+    uploadStatus.className = "error";
+
+    fileName.textContent = ""; /* No filename on error */
+
+    uploadExtra.textContent = "Invalid File - Click or drag an image here again to try another file.";
+
+    fileInfo.textContent = message;
 
     uploadBox.classList.add("error");
     uploadBox.classList.remove("success");
@@ -35,47 +66,64 @@ imageInput.addEventListener("change", function () {
     const file = this.files[0];
     if (!file) return;
 
+    const maxFileSize = 20 * 1024 * 1024; /* 20MB file size limit */
+
     const fileName = file.name.toLowerCase();
+
+    /* File Size Validation */
+    if (file.size > maxFileSize) {
+        fileInfo.textContent = file.name;
+        showError("File too large - Maximum file size is 20MB.");
+        return;
+    }
 
     /* File Type Validation */
     const isJPG = fileName.endsWith(".jpg") || fileName.endsWith(".jpeg");
-    const isTIFF = fileName.endsWith(".tif") || fileName.endsWith(".tiff");
 
     if (fileName.endsWith(".png")) {
-        showError("PNG files are not supported - Only .jpg, .jpeg, .tif, .tiff files can be uploaded.");
+        showError("PNG files are not supported - Only .jpg / .jpeg files can be uploaded.");
         return;
     }
 
      if (fileName.endsWith(".heic")) {
-        showError("HEIC files are not supported - Only .jpg, .jpeg, .tif, .tiff files can be uploaded.");
+        showError("HEIC files are not supported - Only .jpg / .jpeg files can be uploaded.");
         return;
     }
 
     if (fileName.endsWith(".gif")) {
-        showError("GIF files are not supported - Only .jpg, .jpeg, .tif, .tiff files can be uploaded.");
+        showError("GIF files are not supported - Only .jpg / .jpeg files can be uploaded.");
         return;
     }
 
     if (fileName.endsWith(".webp")) {
-        showError("WEBP files are not supported - Only .jpg, .jpeg, .tif, .tiff files can be uploaded.");
+        showError("WEBP files are not supported - Only .jpg / .jpeg files can be uploaded.");
         return;
     }
 
-    if (!isJPG && !isTIFF) {
-        showError("Unsupported file type - Only .jpg, .jpeg, .tif, .tiff files can be uploaded.");
+    if (fileName.endsWith(".tif")) {
+        showError("TIF files are not supported - Only .jpg / .jpeg files can be uploaded.");
+        return;
+    }
+
+    if (!isJPG) {
+        showError("Unsupported file type - Only .jpg / .jpeg files can be uploaded.");
         return;
     }
 
     uploadBox.classList.remove("error");
     uploadBox.classList.add("success");
 
-    uploadText.textContent = "Upload Complete";
+    uploadText.style.display = "none"; /* hide initial text */
+    uploadStatus.innerHTML = '<i class="fa-solid fa-circle-check"></i> Upload Complete';
+    uploadStatus.className = "success";
     fileInfo.textContent = file.name;
 
-    uploadStatus.innerHTML = '<i class="fa-solid fa-circle-check"></i> Ready for EXIF extraction';
+    uploadStatus.innerHTML = '<i class="fa-solid fa-circle-check"></i> Upload Complete - Click the extract button to see EXIF data';
     
     uploadStatus.classList.add("success");
     uploadStatus.classList.remove("error");
+
+    uploadExtra.textContent = "Click or drag an image here again to upload another file.";
 
     /* Store image for EXIF Remove */
     const reader = new FileReader();
@@ -128,7 +176,6 @@ extractButton.addEventListener("click", function () {
                 "File Name": file.name,
                 "File Size": (file.size / 1024).toFixed(2) + " KB",
                 "File Type": file.type,
-                "Date Last Modified": new Date(file.lastModified).toLocaleString()
             };
 
             const basicInfo = `
@@ -158,56 +205,81 @@ extractButton.addEventListener("click", function () {
             `;
 
             /* EXIF DATA */
-            EXIF.getData(img, function () {
+             EXIF.getData(img, function () {
 
-                const make = EXIF.getTag(this, "Make");
-                const model = EXIF.getTag(this, "Model");
-                const dateTaken = EXIF.getTag(this, "DateTimeOriginal");
-
-                const exifData = {
-                    "Camera Make": make || "N/A",
-                    "Camera Model": model || "N/A",
-                    "Date Taken": dateTaken || "N/A",
-                    "Exposure Time": EXIF.getTag(this, "ExposureTime") || "N/A",
-                    "ISO": EXIF.getTag(this, "ISOSpeedRatings") || "N/A",
-                    "Aperture": EXIF.getTag(this, "FNumber") || "N/A",
-                    "Focal Length": EXIF.getTag(this, "FocalLength") || "N/A",
-                    "Software": EXIF.getTag(this, "Software") || "N/A",
+                /* Camera Info */
+                const cameraInfoData = {
+                    "Camera Make": EXIF.getTag(this, "Make") || "Not available",
+                    "Camera Model": EXIF.getTag(this, "Model") || "Not available",
+                    "Lens Model": EXIF.getTag(this, "LensModel") || "Not available",
+                    "Date & Time Taken": EXIF.getTag(this, "DateTimeOriginal") || "Not available",
+                    "Software Modified With": EXIF.getTag(this, "Software") || "Not available",
+                    "Date Last Modified": new Date(file.lastModified).toLocaleString()
                 };
 
-                const lat = EXIF.getTag(this, "GPSLatitude");
-                const lon = EXIF.getTag(this, "GPSLongitude");
-                let gps = "Not available";
+                /* Capture Settings */
+                const captureSettingsData = {
+                    "ISO": EXIF.getTag(this, "ISOSpeedRatings") || "Not available",
+                    "Exposure Time": EXIF.getTag(this, "ExposureTime") || "Not available",
+                    "Aperture": EXIF.getTag(this, "FNumber") || "Not available",
+                    "Focal Length": EXIF.getTag(this, "FocalLength") || "Not available",
+                    "Flash": EXIF.getTag(this, "Flash") !== undefined ? (EXIF.getTag(this, "Flash") ? "Yes" : "No") : "Not available",
+                    "White Balance": EXIF.getTag(this, "WhiteBalance") !== undefined ? (EXIF.getTag(this, "WhiteBalance") === 1 ? "Auto" : "Manual") : "Not available",
+                    "Metering Mode": EXIF.getTag(this, "MeteringMode") || "Not available"
+                };
 
+                /* GPS Info */
+                let lat = EXIF.getTag(this, "GPSLatitude");
+                let lon = EXIF.getTag(this, "GPSLongitude");
+                let gpsAltitude = EXIF.getTag(this, "GPSAltitude");
+                let gpsTimestamp = EXIF.getTag(this, "GPSTimeStamp");
+
+                let gpsLocation = "Not available";
                 if (lat && lon) {
-                    gps = lat.join(", ") + " / " + lon.join(", ");
+                    gpsLocation = lat.join(", ") + " / " + lon.join(", ");
                 }
 
-                exifData["GPS Location"] = gps;
+                gpsAltitude = gpsAltitude ? gpsAltitude + " m" : "Not available";
+                gpsTimestamp = gpsTimestamp ? gpsTimestamp.join(":") : "Not available";
 
-                /* Store data for export*/
+                const gpsInfoData = {
+                    "GPS Location": gpsLocation,
+                    "GPS Altitude": gpsAltitude,
+                    "GPS Timestamp": gpsTimestamp
+                };
+
+                /* Store data for export */
                 exifDataStore = {
                     basic: basicInfoData,
                     image: imagePropsData,
-                    exif: exifData
+                    camera: cameraInfoData,
+                    capture: captureSettingsData,
+                    gps: gpsInfoData
                 };
 
                 let exifDataSection = `<div class="exif-section"><h3>EXIF Metadata</h3>`;
 
-                 if (!make && !model && !dateTaken) {
-                    exifDataSection += `<p>No EXIF data found.</p>`;
-                } else {
-                    exifDataSection += `
-                        <table class="exif-table">
-                            <tr><th>Property</th><th>Value</th></tr>
-                            ${Object.entries(exifData).map(([k,v]) => `<tr><td>${k}</td><td>${v}</td></tr>`).join("")}
-                        </table>
+                function createSubsection(title, data) {
+                    return `
+                        <tr style="background:#f0f0f0;"><th colspan="2" style="text-align:center;">${title}</th></tr>
+                        ${Object.entries(data).map(([k,v]) => `<tr><td>${k}</td><td>${v}</td></tr>`).join("")}
                     `;
                 }
 
-                /* FINAL OUTPUT */
-                exifDataSection += `</div>`;
+                exifDataSection += `
+                <table class="exif-table">
+                <colgroup>
+                <col style="width:30%">
+                <col style="width:70%">
+                </colgroup>
+                `;
+                
+                exifDataSection += createSubsection("Camera Info", cameraInfoData);
+                exifDataSection += createSubsection("Capture Settings", captureSettingsData);
+                exifDataSection += createSubsection("GPS Information", gpsInfoData);
+                exifDataSection += `</table></div>`;
 
+                /* FINAL OUTPUT */
                 exifOutput.innerHTML = basicInfo + imageProps + exifDataSection;
             });
         };
@@ -234,7 +306,7 @@ exportButton.addEventListener("click", function () {
     }
 
     const originalFileName = imageInput.files[0].name;
-    const baseFileName = originalFileName.replace(/\.[^/.]+$/, ""); /* Removes .jpg, .jpeg, .tif, etc. from file name */
+    const baseFileName = originalFileName.replace(/\.[^/.]+$/, ""); /* Removes .jpg, .jpeg, etc. from file name */
     const fileName = `${baseFileName}-exif-data`; /* Sets file name */
 
     /* JSON */
@@ -283,14 +355,14 @@ exportButton.addEventListener("click", function () {
         const doc = new jsPDF();
         let y = 10;
 
-        // Title uses the base file name
+        /* Title uses the base file name */
         doc.setFontSize(18);
         doc.text(`${baseFileName} - EXIF Data`, 105, y, { align: "center" });
         y += 10;
 
         doc.setFontSize(12);
 
-        // Basic File Information Table
+        /* Basic File Information Table */
         const basicRows = Object.entries(exifDataStore.basic).map(([key, value]) => [key, value]);
         doc.autoTable({
             startY: y,
@@ -299,10 +371,15 @@ exportButton.addEventListener("click", function () {
             theme: "grid",
             styles: { fontSize: 10 },
             headStyles: { fillColor: [36, 36, 36] },
+
+            columnStyles: {
+                0: { cellWidth: 55 },
+                1: { cellWidth: "auto" }
+            }
         });
         y = doc.lastAutoTable.finalY + 10;
 
-        // Image Properties Table
+        /* Image Properties Table */
         const imageRows = Object.entries(exifDataStore.image).map(([key, value]) => [key, value]);
         doc.autoTable({
             startY: y,
@@ -311,24 +388,41 @@ exportButton.addEventListener("click", function () {
             theme: "grid",
             styles: { fontSize: 10 },
             headStyles: { fillColor: [36, 36, 36] },
+
+            columnStyles: {
+                0: { cellWidth: 55 },
+                1: { cellWidth: "auto" }
+            }
         });
         y = doc.lastAutoTable.finalY + 10;
 
-        // EXIF Metadata Table
-        const exifRows = Object.entries(exifDataStore.exif).map(([key, value]) => [key, value]);
-        doc.autoTable({
-            startY: y,
-            head: [["Property", "Value"]],
-            body: exifRows,
-            theme: "grid",
-            styles: { fontSize: 10 },
-            headStyles: { fillColor: [36, 36, 36] },
-            didDrawPage: function () {
-                const page = doc.getNumberOfPages();
-                doc.setFontSize(8);
-                doc.text(`Page ${page}`, 105, doc.internal.pageSize.height - 10, { align: "center" });
-            },
+        /* EXIF Metadata Table */
+        const sections = ["camera", "capture", "gps"];
+        sections.forEach(section => {
+            const rows = Object.entries(exifDataStore[section]).map(([key, value]) => [key, value]);
+            doc.autoTable({
+                startY: y,
+                head: [["Property", "Value"]],
+                body: rows,
+                theme: "grid",
+                styles: { fontSize: 10 },
+                headStyles: { fillColor: [36, 36, 36] },
+
+                columnStyles: {
+                    0: { cellWidth: 55 },
+                    1: { cellWidth: "auto" }
+                }
+            });
+            y = doc.lastAutoTable.finalY + 10;
         });
+
+        /* Page numbers */
+        const pageCount = doc.getNumberOfPages();
+        for (let i = 1; i <= pageCount; i++) {
+            doc.setPage(i);
+            doc.setFontSize(8);
+            doc.text(`Page ${i}`, 105, doc.internal.pageSize.height - 10, { align: "center" });
+        }
 
         doc.save(fileName + ".pdf");
     }
