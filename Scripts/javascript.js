@@ -51,7 +51,7 @@ function showError(message) {
 
     fileName.textContent = ""; /* No filename on error */
 
-    uploadExtra.textContent = "Invalid File - Click here again to try another file.";
+    uploadExtra.textContent = "Invalid File - Click or drag an image here again to try another file.";
 
     fileInfo.textContent = message;
 
@@ -123,7 +123,7 @@ imageInput.addEventListener("change", function () {
     uploadStatus.classList.add("success");
     uploadStatus.classList.remove("error");
 
-    uploadExtra.textContent = "Click here again to upload another file.";
+    uploadExtra.textContent = "Click or drag an image here again to upload another file.";
 
     /* Store image for EXIF Remove */
     const reader = new FileReader();
