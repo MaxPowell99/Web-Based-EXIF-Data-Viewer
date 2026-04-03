@@ -5,7 +5,7 @@
 }
 
 body {
-    background: #f4f6f9;
+    background: #0F172A;
     font-family: Arial, Helvetica, sans-serif;
     min-height: 100vh;
     padding: 40px 20px;
@@ -24,21 +24,27 @@ body {
     gap: 30px;
     max-width: 80%;
     margin: auto;
-    background: #ffffff;
+    background: #1E293B;
     padding: 0;
     border-radius: 8px;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
 }
 
-header, .preview, .exif-data, .export, .remove-exif, .about-section {
+.preview, .exif-data, .export, .remove-exif {
     padding-left: 80px;
     padding-right: 80px;
     margin-top: 10px;
     
 }
 
- .preview h2, .exif-data h2, .export h2, .remove-exif h2 {
+.upload-section, .about-section {
+    padding-left: 80px;
+    padding-right: 80px;
+}
+
+ .upload-section h2, .preview h2, .exif-data h2, .export h2, .remove-exif h2 {
     margin-bottom: 10px;
+    color: #16B7A5;
  }
 
 .about-grid {
@@ -56,13 +62,18 @@ header {
     grid-area: header;
     display: flex;
     padding-top: 40px;
+    padding-bottom: 40px;
+    padding-left: 80px;
+    padding-right: 80px;
     justify-content: space-between;
     align-items: center;
+    background: #0B1121;
 }
 
 header h1 {
-    font-size: 28px;
+    font-size: 36px;
     font-weight: 600;
+    color: #16B7A5;
 }
 
 nav {
@@ -110,21 +121,20 @@ nav a.active {
 .upload-section {
     grid-area: upload;
     text-align: center;
-    padding-left: 80px;
-    padding-right: 80px;
 }
 
 .upload-section h2 {
     text-align: left;
+    font-size: 28px;
 }
 
 .upload-box {
     height: 230px;
-    border: 2px dashed #d0d5dd;
+    border: 4px dashed #d0d5dd;
     padding: 50px 20px;
     margin-top: 10px;
     border-radius: 10px;
-    background: #fafafa;
+    background: #324154;
     transition: 0.25s;
 }
 
@@ -269,7 +279,7 @@ img.upload-icon {
 }
 
 .preview-section {
-    background: #fafafa;
+    background: #324154;
     border: 1px solid #e0e4ea;
     border-radius: 8px;
     padding: 40px;
@@ -297,7 +307,7 @@ img.upload-icon {
 }
 
 .exif-section {
-    background: #fafafa;
+    background: #324154;
     border: 1px solid #e0e4ea;
     border-radius: 8px;
     padding: 15px;
@@ -312,6 +322,7 @@ img.upload-icon {
 
 .exif-table {
     width: 100%;
+    background: #3e444d;
     border-collapse: collapse;
     margin-top: 10px;
     margin-bottom: 10px;
@@ -341,12 +352,12 @@ img.upload-icon {
 }
 
 .exif-table th {
-    background-color: #f4f6f9;
+    background: #3e444d;
     font-weight: 600;
 }
 
 .exif-table tr:nth-child(even) {
-    background-color: #fafafa;
+    background: #3e444d;
 }
 
 .export {
@@ -355,7 +366,7 @@ img.upload-icon {
 }
 
 .export-container {
-    background: #fafafa;
+    background: #324154;
     border: 1px solid #e0e4ea;
     border-radius: 8px;
     padding: 20px;
@@ -378,9 +389,11 @@ img.upload-icon {
 .export-controls select {
     flex: 1;
     padding: 10px;
+    background: #1E293B;
     border-radius: 6px;
     border: 1px solid #d0d5dd;
     font-size: 14px;
+    color: #ffffff;
 }
 
 .export-controls button {
@@ -404,7 +417,7 @@ img.upload-icon {
 }
 
 .remove-exif-container {
-    background: #fafafa;
+    background: #324154;
     border: 1px solid #e0e4ea;
     border-radius: 8px;
     padding: 20px;
@@ -449,24 +462,25 @@ img.upload-icon {
 }
 
 .about-section {
-    background: #ffffff;
+    background: #1E293B;
     line-height: 1.6;
 }
 
 .about-section h2 {
     font-size: 28px;
-    margin-bottom: 20px;
+    color: #16B7A5
 }
 
 .about-section h3 {
-    font-size: 20px;
+    font-size: 24px;
     margin-top: 25px;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
+    color: #ffffff
 }
 
 .about-section p {
     margin-bottom: 15px;
-    color: #333;
+    color: #ffffff
 }
 
 .about-section ul {
@@ -476,6 +490,7 @@ img.upload-icon {
 
 .about-section li {
     margin-bottom: 8px;
+    color: #ffffff
 }
 
 footer {
