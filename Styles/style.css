@@ -536,8 +536,8 @@ footer {
     }
 }
 
-/* For screens smaller than 800px */
-@media (max-width: 800px) {
+/* For screens smaller than 900px */
+@media (max-width: 900px) {
 
     body {
         padding: 15px 8px;
