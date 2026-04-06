@@ -11,6 +11,10 @@ body {
     padding: 40px 20px;
 }
 
+h1, h2, h3 {
+    font-family: "Arial Black", Arial, sans-serif;
+}
+
 .grid-container {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -314,7 +318,7 @@ img.upload-icon {
 
 .exif-section h3 {
     margin-bottom: 10px;
-    font-size: 16px;
+    font-size: 20px;
     color: #16B7A5;
 }
 
@@ -324,7 +328,7 @@ img.upload-icon {
     border-collapse: collapse;
     margin-top: 10px;
     margin-bottom: 10px;
-    font-size: 14px;
+    font-size: 16px;
     table-layout: fixed;
 }
 
@@ -347,6 +351,7 @@ img.upload-icon {
 }
 
 .exif-table td {
+    font-family: "Courier New", Courier, monospace;
     word-break: break-word;
 }
 
@@ -369,7 +374,7 @@ img.upload-icon {
 
 .export-container h3 {
     margin-bottom: 10px;
-    font-size: 18px;
+    font-size: 20px;
     color: #16B7A5;
 }
 
@@ -429,7 +434,7 @@ img.upload-icon {
 }
 
 .remove-text h3 {
-    font-size: 18px;
+    font-size: 20px;
     color: #16B7A5;
 }
 
