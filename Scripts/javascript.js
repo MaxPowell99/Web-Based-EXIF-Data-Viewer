@@ -219,12 +219,28 @@ extractButton.addEventListener("click", function () {
 
                 /* Capture Settings */
                 const captureSettingsData = {
-                    "ISO": EXIF.getTag(this, "ISOSpeedRatings") || "Not available",
-                    "Exposure Time": EXIF.getTag(this, "ExposureTime") || "Not available",
-                    "Aperture": EXIF.getTag(this, "FNumber") || "Not available",
-                    "Focal Length": EXIF.getTag(this, "FocalLength") || "Not available",
-                    "Flash": EXIF.getTag(this, "Flash") !== undefined ? (EXIF.getTag(this, "Flash") ? "Yes" : "No") : "Not available",
-                    "White Balance": EXIF.getTag(this, "WhiteBalance") !== undefined ? (EXIF.getTag(this, "WhiteBalance") === 1 ? "Auto" : "Manual") : "Not available",
+                    "ISO": EXIF.getTag(this, "ISOSpeedRatings") ? EXIF.getTag(this, "ISOSpeedRatings") : "Not available",
+
+                    "Exposure Time": EXIF.getTag(this, "ExposureTime") 
+                        ? EXIF.getTag(this, "ExposureTime") + " s"
+                        : "Not available",
+
+                    "Aperture": EXIF.getTag(this, "FNumber") 
+                        ? "f/" + EXIF.getTag(this, "FNumber")
+                        : "Not available",
+
+                    "Focal Length": EXIF.getTag(this, "FocalLength") 
+                        ? EXIF.getTag(this, "FocalLength") + " mm"
+                        : "Not available",
+
+                    "Flash": EXIF.getTag(this, "Flash") !== undefined 
+                        ? (EXIF.getTag(this, "Flash") ? "Yes (Flash Fired)" : "No (Flash Did Not Fire)") 
+                        : "Not available",
+
+                    "White Balance": EXIF.getTag(this, "WhiteBalance") !== undefined 
+                        ? (EXIF.getTag(this, "WhiteBalance") === 1 ? "Auto White Balance" : "Manual White Balance") 
+                        : "Not available",
+
                     "Metering Mode": EXIF.getTag(this, "MeteringMode") || "Not available"
                 };
 
@@ -240,7 +256,7 @@ extractButton.addEventListener("click", function () {
                 }
 
                 gpsAltitude = gpsAltitude ? gpsAltitude + " m" : "Not available";
-                gpsTimestamp = gpsTimestamp ? gpsTimestamp.join(":") : "Not available";
+                gpsTimestamp = gpsTimestamp ? gpsTimestamp.join(":") + " UTC" : "Not available";
 
                 const gpsInfoData = {
                     "GPS Location": gpsLocation,
