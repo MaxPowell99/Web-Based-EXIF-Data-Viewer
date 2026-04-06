@@ -325,60 +325,20 @@ exportButton.addEventListener("click", function () {
     const baseFileName = originalFileName.replace(/\.[^/.]+$/, ""); /* Removes .jpg, .jpeg, etc. from file name */
     const fileName = `${baseFileName}-exif-data`; /* Sets file name */
 
-    /* JSON */
-    if (format === "json") {
-        const content = JSON.stringify(exifDataStore, null, 2);
-        downloadFile(content, "application/json", fileName + ".json");
-    }
-
-    /* CSV */
-    else if (format === "csv") {
-        let rows = [];
-        for (let section in exifDataStore) {
-            rows.push(`"${section.toUpperCase()}"`);
-            for (let key in exifDataStore[section]) {
-                rows.push(`"${key}","${exifDataStore[section][key]}"`);
-            }
-            rows.push("");
-        }
-        const content = rows.join("\n");
-        downloadFile(content, "text/csv", fileName + ".csv");
-    }
-
-    /* XML */
-    else if (format === "xml") {
-        let content = `<exifData>\n`;
-        for (let section in exifDataStore) {
-            content += `  <${section}>\n`;
-            for (let key in exifDataStore[section]) {
-                content += `    <${key.replace(/\s/g, "_")}>${exifDataStore[section][key]}</${key.replace(/\s/g, "_")}>\n`;
-            }
-            content += `  </${section}>\n`;
-        }
-        content += `</exifData>`;
-        downloadFile(content, "application/xml", fileName + ".xml");
-    }
-
-    /* PHP */
-    else if (format === "php") {
-        const content = "<?php\n$exifData = " + JSON.stringify(exifDataStore, null, 2) + ";\n?>";
-        downloadFile(content, "application/x-httpd-php", fileName + ".php");
-    }
-
     /* PDF */
-    else if (format === "pdf") {
+    if (format === "pdf") {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
         let y = 10;
 
-        /* Title uses the base file name */
+        /* PDF Title uses the base file name */
         doc.setFontSize(18);
         doc.text(`${baseFileName} - EXIF Data`, 105, y, { align: "center" });
         y += 10;
 
         doc.setFontSize(12);
 
-        /* Basic File Information Table */
+        /* PDF Basic File Information Table */
         const basicRows = Object.entries(exifDataStore.basic).map(([key, value]) => [key, value]);
         doc.autoTable({
             startY: y,
@@ -395,7 +355,7 @@ exportButton.addEventListener("click", function () {
         });
         y = doc.lastAutoTable.finalY + 10;
 
-        /* Image Properties Table */
+        /* PDF Image Properties Table */
         const imageRows = Object.entries(exifDataStore.image).map(([key, value]) => [key, value]);
         doc.autoTable({
             startY: y,
@@ -412,7 +372,7 @@ exportButton.addEventListener("click", function () {
         });
         y = doc.lastAutoTable.finalY + 10;
 
-        /* EXIF Metadata Table */
+        /* PDF EXIF Metadata Table */
         const sections = ["camera", "capture", "gps"];
         sections.forEach(section => {
             const rows = Object.entries(exifDataStore[section]).map(([key, value]) => [key, value]);
@@ -432,7 +392,7 @@ exportButton.addEventListener("click", function () {
             y = doc.lastAutoTable.finalY + 10;
         });
 
-        /* Page numbers */
+        /* PDF Page numbers */
         const pageCount = doc.getNumberOfPages();
         for (let i = 1; i <= pageCount; i++) {
             doc.setPage(i);
@@ -441,6 +401,65 @@ exportButton.addEventListener("click", function () {
         }
 
         doc.save(fileName + ".pdf");
+    }
+    
+    /* TXT */
+    else if (format === "txt") {
+        let content = "";
+        for (let section in exifDataStore) {
+
+            content += "-----------------------------\n";
+            content += section.toUpperCase() + "\n";
+            content += "-----------------------------\n";
+
+            for (let key in exifDataStore[section]) {
+                content += key + ": " + exifDataStore[section][key] + "\n";
+            }
+
+            content += "\n";
+        }
+
+        downloadFile(content, "text/plain", fileName + ".txt");
+    }
+    
+    /* CSV */
+    else if (format === "csv") {
+        let rows = [];
+        for (let section in exifDataStore) {
+            rows.push(`"${section.toUpperCase()}"`);
+            for (let key in exifDataStore[section]) {
+                rows.push(`"${key}","${exifDataStore[section][key]}"`);
+            }
+            rows.push("");
+        }
+        const content = rows.join("\n");
+        downloadFile(content, "text/csv", fileName + ".csv");
+    }
+
+    /* JSON */
+    else if (format === "json") {
+        const content = JSON.stringify(exifDataStore, null, 2);
+        downloadFile(content, "application/json", fileName + ".json");
+    }
+
+    /* PHP */
+    else if (format === "php") {
+        const content = "<?php\n$exifData = " + JSON.stringify(exifDataStore, null, 2) + ";\n?>";
+        downloadFile(content, "application/x-httpd-php", fileName + ".php");
+    }
+
+    /* XML */
+    else if (format === "xml") {
+        let content = `<exifData>\n`;
+        for (let section in exifDataStore) {
+            content += `  <${section}>\n`;
+            for (let key in exifDataStore[section]) {
+                content += `    <${key.replace(/\s/g, "_")}>${exifDataStore[section][key]}</${key.replace(/\s/g, "_")}>\n`;
+            }
+            content += `  </${section}>\n`;
+        }
+        content += `</exifData>`;
+        downloadFile(content, "application/xml", fileName + ".xml");
     }
 });
 
