@@ -584,12 +584,13 @@ footer {
         font-size: 26px;
     }
 
-    #uploadStatus {
-        font-size: 11px;
+    .upload-box {
+        padding-left: 10px;
+        padding-right: 10px;
     }
-    
-    #fileInfo, #uploadExtra {
-        font-size: 12px;
+
+    #uploadStatus, #fileInfo, #uploadExtra {
+        font-size: 11px;
     }
 
     .extract-button, .export-controls button {
