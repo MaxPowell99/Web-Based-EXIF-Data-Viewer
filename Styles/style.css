@@ -584,11 +584,11 @@ footer {
         font-size: 26px;
     }
 
-    #uploadStatus, #uploadExtra {
-        font-size: 12px;
+    #uploadStatus {
+        font-size: 11px;
     }
-
-    #fileInfo {
+    
+    #fileInfo, #uploadExtra {
         font-size: 12px;
     }
 
