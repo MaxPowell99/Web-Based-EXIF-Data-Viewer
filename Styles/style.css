@@ -580,6 +580,19 @@ footer {
         margin-top: 20px;
     }
 
+    .upload-section h2 {
+        font-size: 26px;
+    }
+
+    .upload-box {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    #uploadStatus, #fileInfo, #uploadExtra {
+        font-size: 11px;
+    }
+
     .extract-button, .export-controls button {
         width: 100%;
         padding: 14px;
